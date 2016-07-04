@@ -1,0 +1,14 @@
+{
+  "name": "leaderboards",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "meteor-node-stubs": "~0.2.0",
+    "strava-v3": "^1.12.0"
+  },
+  "devDependencies": {
+    
+  }
+}

@@ -1,0 +1,48 @@
+/* CSS declarations go here */
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+main {
+    flex: 1 0 auto;
+}
+li .speed {
+    float: right;
+}
+li .power {
+    float: right;
+}
+li .heartrate {
+    float: right;
+}
+a {
+    clear: right;
+}
+.inputContainer {
+    padding-top: 25px;
+}
+input {
+    text-align: center;
+}
+.login {
+    text-align: center;
+    width: 200px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.at-social-btn {
+    background-color: #FC4C02;
+}
+.contactList li{
+  margin: 0 0 10px 0;
+}
+#messageForm {
+  color: white;
+}
