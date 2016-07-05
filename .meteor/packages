@@ -21,8 +21,10 @@ materialize:materialize
 http
 useraccounts:materialize
 selaias:accounts-strava
-accounts-ui
 session
 templates:array
 reactive-var
 useraccounts:core
+accounts-ui
+accounts-base
+service-configuration

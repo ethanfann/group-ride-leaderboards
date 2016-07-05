@@ -10,9 +10,9 @@ import './main.html';
 AccountsTemplates.configure({
     hideSignUpLink: true,
     texts: {
-      title: {
-        signIn: "",
-      }
+        title: {
+            signIn: "",
+        }
     }
 });
 
