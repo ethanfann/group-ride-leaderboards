@@ -28,3 +28,5 @@ useraccounts:core
 accounts-ui
 accounts-base
 service-configuration
+email
+utilities:avatar

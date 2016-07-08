@@ -4,45 +4,62 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url('/images/background.jpg');
 }
 main {
     flex: 1 0 auto;
 }
-li .speed {
-    float: right;
-}
-li .power {
-    float: right;
-}
-li .heartrate {
-    float: right;
-}
 a {
     clear: right;
 }
-.inputContainer {
+#inputContainer {
     padding-top: 25px;
 }
 input {
     text-align: center;
-}
-.login {
-    text-align: center;
-    width: 200px;
-    height: 100px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+    color: white;
 }
 .at-social-btn {
     background-color: #FC4C02;
+    width: 50px;
 }
-.contactList li{
-  margin: 0 0 10px 0;
+.contactList li {
+    margin: 0 0 10px 0;
 }
-#messageForm {
+.promo i {
+    margin: 40px 0;
+    color: #FC4C02;
+    font-size: 7rem;
+    display: block;
+}
+.loginButton {
+    margin: 0 auto;
+    width: 200px;
+    padding-top: 25vh;
+}
+#banner {
+  background: white;
+  padding-left: 15px;
+  padding-right: 25px;
+}
+#title {
   color: white;
+}
+.leaderboardsContainer {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid #FC4C02;
+  box-shadow: 0 1px 0 0 #FC4C02;
+}
+#navbarLinks{
+  padding-top: 5px;
+}
+.secondary-content {
+  color: #FC4C02;
 }

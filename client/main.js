@@ -7,12 +7,20 @@ import {
 
 import './main.html';
 
+
 AccountsTemplates.configure({
     hideSignUpLink: true,
     texts: {
         title: {
             signIn: "",
         }
+    }
+});
+
+Avatar.setOptions({
+    customImageProperty: function() {
+        var user = this;
+        return Meteor.user().services.strava.profile_medium;
     }
 });
 
@@ -113,199 +121,200 @@ Template.leaderboards.helpers({
     },
 });
 
+Template.header.helpers({
+  getUserName: function() {
+      return Meteor.user().services.strava.firstname + " " + Meteor.user().services.strava.lastname;
+  },
+});
+
+Template.header.events({
+  "click #logout": function(event, template){
+    Meteor.logout();
+  }
+});
+
 Template.leaderboards.events({
     'submit form' (event, template) {
         event.preventDefault();
 
         var input = event.target.activityInput.value;
 
-        if (input.toLowerCase().includes("strava") == true) {
-            result = input.split('/');
-            id = result[result.length - 1];
-        } else {
-            id = input;
+        if(input == "")
+        {
+          Materialize.toast('Enter a url!', 4000)
         }
+        else{
+          if (input.toLowerCase().includes("strava") == true) {
+              result = input.split('/');
+              id = result[result.length - 1];
+          } else {
+              id = input;
+          }
 
-        template.max_speeds.get().length = 0;
-        template.max_watts.get().length = 0;
-        template.average_heartrates.get().length = 0;
-        template.max_heartrates.get().length = 0;
-        template.kudos_counts.get().length = 0;
-        template.comment_counts.get().length = 0;
-        template.photo_counts.get().length = 0;
-        template.average_cadences.get().length = 0;
-        template.average_watts.get().length = 0;
-        template.suffer_scores.get().length = 0;
-        template.kilojoules.get().length = 0;
+          template.max_speeds.get().length = 0;
+          template.max_watts.get().length = 0;
+          template.average_heartrates.get().length = 0;
+          template.max_heartrates.get().length = 0;
+          template.kudos_counts.get().length = 0;
+          template.comment_counts.get().length = 0;
+          template.photo_counts.get().length = 0;
+          template.average_cadences.get().length = 0;
+          template.average_watts.get().length = 0;
+          template.suffer_scores.get().length = 0;
+          template.kilojoules.get().length = 0;
 
-        Meteor.call("requestRelatedActivitiesByActivityId", id, function(error, result) {
-            var json = EJSON.parse(result.content);
-            console.log(json);
+          Meteor.call("requestRelatedActivitiesByActivityId", id, function(error, result) {
+              var json = EJSON.parse(result.content);
 
-            for (var i = 0; i < json.length; i++) {
-                var max_speedEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    max_speed: (json[i].max_speed * 2.236936).toFixed(1),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var max_wattsEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    max_watt: (json[i].device_watts == true ? json[i].max_watts : 0),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var average_heartrateEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    average_heartrate: (json[i].has_heartrate == true ? json[i].average_heartrate : 0),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var max_heartrateEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    max_heartrate: (json[i].has_heartrate == true ? json[i].max_heartrate : 0),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var kudos_countEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    kudos_count: json[i].kudos_count,
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var comment_countEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    comment_count: json[i].comment_count,
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var photo_countEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    photo_count: json[i].photo_count,
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var average_cadenceEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    average_cadence: (json[i].hasOwnProperty("average_cadence") ? json[i].average_cadence : 0),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var average_wattsEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    average_watt: (json[i].device_watts == true ? json[i].average_watts : 0),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var suffer_scoreEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    suffer_score: (json[i].hasOwnProperty("suffer_score") ? json[i].suffer_score : 0),
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
-                var kilojouleEntry = {
-                    name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                    kilojoule: json[i].kilojoules,
-                    stravaURL: "https://www.strava.com/activities/" + json[i].id
-                };
+              for (var i = 0; i < json.length; i++) {
+                  var max_speedEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      max_speed: (json[i].max_speed * 2.236936).toFixed(1),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var max_wattsEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      max_watt: (json[i].device_watts == true ? json[i].max_watts : 0),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var average_heartrateEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      average_heartrate: (json[i].has_heartrate == true ? json[i].average_heartrate : 0),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var max_heartrateEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      max_heartrate: (json[i].has_heartrate == true ? json[i].max_heartrate : 0),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var kudos_countEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      kudos_count: json[i].kudos_count,
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var comment_countEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      comment_count: json[i].comment_count,
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var photo_countEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      photo_count: json[i].total_photo_count,
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var average_cadenceEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      average_cadence: (json[i].hasOwnProperty("average_cadence") ? json[i].average_cadence : 0),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var average_wattsEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      average_watt: (json[i].device_watts == true ? json[i].average_watts : 0),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var suffer_scoreEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      suffer_score: (json[i].hasOwnProperty("suffer_score") ? json[i].suffer_score : 0),
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
+                  var kilojouleEntry = {
+                      name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                      kilojoule: json[i].kilojoules,
+                      stravaURL: "https://www.strava.com/activities/" + json[i].id
+                  };
 
-                average_heartrateEntry.average_heartrate = average_heartrateEntry.average_heartrate.toFixed(0);
-                max_heartrateEntry.max_heartrate = max_heartrateEntry.max_heartrate.toFixed(0);
-                average_cadenceEntry.average_cadence = average_cadenceEntry.average_cadence.toFixed(0);
-                average_wattsEntry.average_watt = average_wattsEntry.average_watt.toFixed(0);
-                kilojouleEntry.kilojoule = kilojouleEntry.kilojoule.toFixed(0);
+                  template.max_speeds.push(max_speedEntry);
+                  template.max_watts.push(max_wattsEntry);
+                  template.average_heartrates.push(average_heartrateEntry);
+                  template.max_heartrates.push(max_heartrateEntry);
+                  template.kudos_counts.push(kudos_countEntry);
+                  template.comment_counts.push(comment_countEntry);
+                  template.photo_counts.push(photo_countEntry);
+                  template.average_cadences.push(average_cadenceEntry);
+                  template.average_watts.push(average_wattsEntry);
+                  template.suffer_scores.push(suffer_scoreEntry);
+                  template.kilojoules.push(kilojouleEntry);
+              }
+          });
 
-                template.max_speeds.push(max_speedEntry);
-                template.max_watts.push(max_wattsEntry);
-                template.average_heartrates.push(average_heartrateEntry);
-                template.max_heartrates.push(max_heartrateEntry);
-                template.kudos_counts.push(kudos_countEntry);
-                template.comment_counts.push(comment_countEntry);
-                template.photo_counts.push(photo_countEntry);
-                template.average_cadences.push(average_cadenceEntry);
-                template.average_watts.push(average_wattsEntry);
-                template.suffer_scores.push(suffer_scoreEntry);
-                template.kilojoules.push(kilojouleEntry);
-            }
-        });
+          Meteor.call("requestActivityByActivityId", id, function(error, result) {
+              var json = EJSON.parse(result.content);
 
-        Meteor.call("requestActivityByActivityId", id, function(error, result) {
-            var json = EJSON.parse(result.content);
-            console.log(json);
+              if (json.athlete.resource_state == '1') {
+                  var name = Meteor.user().services.strava.firstname + " " + Meteor.user().services.strava.lastname;
+              } else {
+                  var name = json.athlete.firstname + " " + json.athlete.lastname
+              }
 
-            template.activityTitle.set(json.name);
+              var max_speedEntry = {
+                  name: name,
+                  max_speed: (json.max_speed * 2.236936).toFixed(1),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var max_wattsEntry = {
+                  name: name,
+                  max_watt: (json.device_watts == true ? json.max_watts : 0),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var average_heartrateEntry = {
+                  name: name,
+                  average_heartrate: (json.has_heartrate == true ? json.average_heartrate : 0),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var max_heartrateEntry = {
+                  name: name,
+                  max_heartrate: (json.has_heartrate == true ? json.max_heartrate : 0),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var kudos_countEntry = {
+                  name: name,
+                  kudos_count: json.kudos_count,
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var comment_countEntry = {
+                  name: name,
+                  comment_count: json.comment_count,
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var photo_countEntry = {
+                  name: name,
+                  photo_count: json.total_photo_count,
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var average_cadenceEntry = {
+                  name: name,
+                  average_cadence: (json.hasOwnProperty("average_cadence") ? json.average_cadence : 0),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var average_wattsEntry = {
+                  name: name,
+                  average_watt: (json.device_watts == true ? json.average_watts : 0),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var suffer_scoreEntry = {
+                  name: name,
+                  suffer_score: (json.hasOwnProperty("suffer_score") ? json.suffer_score : 0),
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
+              var kilojouleEntry = {
+                  name: name,
+                  kilojoule: json.kilojoules,
+                  stravaURL: "https://www.strava.com/activities/" + json.id
+              };
 
-
-            if (json.athlete.resource_state == '1') {
-                var name = Meteor.user().services.strava.firstname + " " + Meteor.user().services.strava.lastname;
-            } else {
-                var name = json.athlete.firstname + " " + json.athlete.lastname
-            }
-
-            var max_speedEntry = {
-                name: name,
-                max_speed: (json.max_speed * 2.236936).toFixed(1),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var max_wattsEntry = {
-                name: name,
-                max_watt: (json.device_watts == true ? json.max_watts : 0),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var average_heartrateEntry = {
-                name: name,
-                average_heartrate: (json.has_heartrate == true ? json.average_heartrate : 0),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var max_heartrateEntry = {
-                name: name,
-                max_heartrate: (json.has_heartrate == true ? json.max_heartrate : 0),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var kudos_countEntry = {
-                name: name,
-                kudos_count: json.kudos_count,
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var comment_countEntry = {
-                name: name,
-                comment_count: json.comment_count,
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var photo_countEntry = {
-                name: name,
-                photo_count: json.photo_count,
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var average_cadenceEntry = {
-                name: name,
-                average_cadence: (json.hasOwnProperty("average_cadence") ? json.average_cadence : 0),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var average_wattsEntry = {
-                name: name,
-                average_watt: (json.device_watts == true ? json.average_watts : 0),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var suffer_scoreEntry = {
-                name: name,
-                suffer_score: (json.hasOwnProperty("suffer_score") ? json.suffer_score : 0),
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-            var kilojouleEntry = {
-                name: name,
-                kilojoule: json.kilojoules,
-                stravaURL: "https://www.strava.com/activities/" + json.id
-            };
-
-
-            average_heartrateEntry.average_heartrate = average_heartrateEntry.average_heartrate.toFixed(0);
-            max_heartrateEntry.max_heartrate = max_heartrateEntry.max_heartrate.toFixed(0);
-            average_cadenceEntry.average_cadence = average_cadenceEntry.average_cadence.toFixed(0);
-            average_wattsEntry.average_watt = average_wattsEntry.average_watt.toFixed(0);
-            kilojouleEntry.kilojoule = kilojouleEntry.kilojoule.toFixed(0);
-
-            template.max_speeds.push(max_speedEntry);
-            template.max_watts.push(max_wattsEntry);
-            template.average_heartrates.push(average_heartrateEntry);
-            template.max_heartrates.push(max_heartrateEntry);
-            template.kudos_counts.push(kudos_countEntry);
-            template.comment_counts.push(comment_countEntry);
-            template.photo_counts.push(photo_countEntry);
-            template.average_cadences.push(average_cadenceEntry);
-            template.average_watts.push(average_wattsEntry);
-            template.suffer_scores.push(suffer_scoreEntry);
-            template.kilojoules.push(kilojouleEntry);
-        });
+              template.activityTitle.set(json.name);
+              template.max_speeds.push(max_speedEntry);
+              template.max_watts.push(max_wattsEntry);
+              template.average_heartrates.push(average_heartrateEntry);
+              template.max_heartrates.push(max_heartrateEntry);
+              template.kudos_counts.push(kudos_countEntry);
+              template.comment_counts.push(comment_countEntry);
+              template.photo_counts.push(photo_countEntry);
+              template.average_cadences.push(average_cadenceEntry);
+              template.average_watts.push(average_wattsEntry);
+              template.suffer_scores.push(suffer_scoreEntry);
+              template.kilojoules.push(kilojouleEntry);
+          });
+        }
     }
 });

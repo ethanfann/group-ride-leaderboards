@@ -1,5 +1,5 @@
 <head>
-    <title>Worlds</title>
+    <title>Freds</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -20,11 +20,19 @@
 </body>
 
 <template name="header">
-    <nav class="light-blue darken-4">
+    <nav class="cyan darken-4">
         <div class="nav-wrapper">
             <div class="container">
-                <span id="titleText" class="brand-logo">Tuesday Night Worlds</span>
-                <ul class="right hide-on-med-and-down">
+                <span id="titleText" class="brand-logo">Freds</span>
+                <ul id="navbarLinks" class="right">
+                    {{#if currentUser}}
+                    <li>
+                        <span>{{> avatar user=currentUser shape="circle"}}</span>
+                    </li>
+                    <li>
+                        <a class="waves-effect waves-light btn" style="background-color: #FC4C02;" id="logout">logout</a>
+                    </li>
+                    {{/if}}
                 </ul>
             </div>
         </div>
@@ -34,162 +42,192 @@
 <template name="display">
     {{#if currentUser}} {{> leaderboards}} {{else}}
     <div class="container">
-        <div class="login">
-            {{> atForm}}
+        <div class="row">
+            <div class="loginButton">
+                {{> atForm}}
+            </div>
         </div>
     </div>
-    {{/if}}
+    {{/if}} {{> banner}}
 </template>
 
-<template name="leaderboards">
-    <div class="inputContainer">
-        <div class="container">
-            <form class="col s12 m4 l8">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input placeholder="Ex. 539670567 or https://www.strava.com/activities/539670567" type="text" name="activityInput" autocomplete="off">
-                    </div>
+<template name="banner">
+    <div id="banner" class="container z-depth-1">
+        <div class="row">
+            <div class="col s4">
+                <div class="center promo promo-example">
+                    <i class="material-icons">language</i>
+                    <p class="promo-caption">1. Sign in with Strava</p>
+                    <p class="light center">Connecting to Strava gives us access to all the ride data we need to display the leaderboards</p>
                 </div>
-                <div class="row center-align">
-                    <button class="waves-effect waves-light btn" type="submit">Submit</button>
+            </div>
+            <div class="col s4">
+                <div class="center promo promo-example">
+                    <i class="material-icons">launch</i>
+                    <p class="promo-caption">2. Find a ride activity url</p>
+                    <p class="light center">Navigate to a Strava activity then copy down the url located in your browser's address bar</p>
                 </div>
-            </form>
-        </div>
-        <div class="container">
-            <h2 class="center-align">{{getActivityTitle}}</h2>
-        </div>
-    </div>
-    <div class="leaderboardsContainer">
-        <div class="container">
-            <div class="row">
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Max Speed</h4></li>
-                        {{#each get_max_speeds}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{max_speed}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Max Power</h4></li>
-                        {{#each get_max_watts}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{max_watt}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Avg Heartrate</h4></li>
-                        {{#each get_average_heartrates}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{average_heartrate}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Max Heartrate</h4></li>
-                        {{#each get_max_heartrates}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{max_heartrate}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Most Kudos</h4></li>
-                        {{#each get_kudos_counts}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{kudos_count}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Most Comments</h4></li>
-                        {{#each get_comment_counts}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{comment_count}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Most Photos</h4></li>
-                        {{#each get_photo_counts}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{photo_count}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Avg Cadence</h4></li>
-                        {{#each get_average_cadences}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{average_cadence}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Avg Watts</h4></li>
-                        {{#each get_average_watts}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{average_watt}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Suffer Score</h4></li>
-                        {{#each get_suffer_scores}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{suffer_score}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m6 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Kilojoules</h4></li>
-                        {{#each get_kilojoules}}
-                        <li class="collection-item">
-                            <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{kilojoule}}</a></div>
-                        </li>
-                        {{/each}}
-                    </ul>
+            </div>
+            <div class="col s4">
+                <div class="center promo promo-example">
+                    <i class="material-icons">reorder</i>
+                    <p class="promo-caption">3. Enjoy the leaderboards!</p>
+                    <p class="light center">Data will appear in the lists after submitting the url</p>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
+
+<template name="leaderboards">
+
+    <div id="inputContainer" class="container">
+        <form>
+            <div class="row">
+                <div class="input-field">
+                    <input placeholder="For example: https://www.strava.com/activities/539670567" type="text" name="activityInput" autocomplete="off">
+                </div>
+            </div>
+            <div class="row center-align">
+                <button class="waves-effect waves-light btn" style="background-color: #FC4C02;" type="submit">Display</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="title" class="container">
+        <h2 class="center-align">{{getActivityTitle}}</h2>
+    </div>
+
+    <div class="leaderboardsContainer">
+        <div class="row">
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Max Speed</h4></li>
+                    {{#each get_max_speeds}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{max_speed}} mph</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Max Power</h4></li>
+                    {{#each get_max_watts}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{max_watt}} W</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Avg Heartrate</h4></li>
+                    {{#each get_average_heartrates}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{average_heartrate}} bpm</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Max Heartrate</h4></li>
+                    {{#each get_max_heartrates}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{max_heartrate}} bpm</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Kudos</h4></li>
+                    {{#each get_kudos_counts}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{kudos_count}}</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Comments</h4></li>
+                    {{#each get_comment_counts}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{comment_count}}</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Photos</h4></li>
+                    {{#each get_photo_counts}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{photo_count}}</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Avg Cadence</h4></li>
+                    {{#each get_average_cadences}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{average_cadence}} rpm</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Avg Watts</h4></li>
+                    {{#each get_average_watts}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{average_watt}} W</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Suffer Score</h4></li>
+                    {{#each get_suffer_scores}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{suffer_score}}</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col s12 m6 l4">
+                <ul class="collection with-header z-depth-1">
+                    <li class="collection-header">
+                        <h4>Kilojoules</h4></li>
+                    {{#each get_kilojoules}}
+                    <li class="collection-item">
+                        <div>{{plusOne @index}}. {{name}} <a href={{stravaURL}} class="secondary-content" target="_blank">{{kilojoule}} kJ</a></div>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+
 <template name="footer">
-    <footer class="page-footer light-blue darken-4">
+    <footer class="page-footer cyan darken-4">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
@@ -197,18 +235,19 @@
                     <p class="grey-text text-lighten-4">Made possible with Strava</p>
                 </div>
                 <div class="col l4 offset-l2 s12">
-                    <h5 class="white-text">Contact</h5>
+                    <h5 class="white-text">Connect</h5>
                     <ul class="contactList">
-                        <li><a id="twitter-button" class="btn" title="twitter" href="https://twitter.com/ethancfann"><i></i><span class="label"><b>Twitter</b></span></a></li>
-                        <li><a id="trello-button" class="btn" title="trello" href="https://trello.com/b/PjgFX31P"><i></i><span class="label"><b>Trello</b></span></a></li>
-                        <li><a id="github-button" class="btn" title="github" href="https://github.com/ethanfann/group-ride-leaderboards"><i></i><span class="label"><b>Github</b></span></a></li>
+                        <li><a id="github-button" class="btn" title="github" href="https://github.com/ethanfann/freds"><i></i><span class="label"><b>Github</b></span></a></li>
+                        <li><a id="twitter-button" class="btn blue" title="twitter" href="https://twitter.com/ethancord"><i></i><span class="label"><b>Twitter</b></span></a></li>
+                        <li><a id="strava-button" class="btn" title="strava" style="background-color: #FC4C02;" href="https://www.strava.com/athletes/5922716"><i></i><span class="label"><b>Strava</b></span></a></li>
                     </ul>
                 </div>
             </div>
+
         </div>
         <div class="footer-copyright">
             <div class="container">
-                © 2016 Ethan Fann
+                © 2016 Ethan Fann - All Rights Reserved
             </div>
         </div>
     </footer>

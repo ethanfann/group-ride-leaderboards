@@ -5,6 +5,13 @@ import {
     HTTP
 } from 'meteor/http';
 
+
+Avatar.setOptions({
+  customImageProperty: function() {
+    return Meteor.user().services.strava.profile_medium;
+  }
+});
+
 Meteor.methods({
     requestRelatedActivitiesByActivityId: function(id) {
         var token = Meteor.user().services.strava.accessToken;
