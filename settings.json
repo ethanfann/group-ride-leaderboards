@@ -1,8 +1,0 @@
-{
-  "galaxy.meteor.com": {
-     "env": {
-       "ROOT_URL": "http://freds.meteorapp.com",
-       "MONGO_URL": "mongodb://velobro:efhv2123@ds011725.mlab.com:11725/grouprideleaderboards"
-     }
-   }
-}
