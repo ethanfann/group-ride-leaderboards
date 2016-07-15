@@ -5,11 +5,12 @@ import {
     HTTP
 } from 'meteor/http';
 
+Meteor.startup(function(){
+  Kadira.connect('J5ZaR34WnN6p6hbpH', 'fc72b9e2-0b89-4392-9ac4-945e2b3385ec');
+});
 
-Avatar.setOptions({
-  customImageProperty: function() {
-    return Meteor.user().services.strava.profile_medium;
-  }
+Meteor.publish("userData", function () {
+    return Meteor.users.find({_id: this.userId});
 });
 
 Meteor.methods({
@@ -17,22 +18,24 @@ Meteor.methods({
         var token = Meteor.user().services.strava.accessToken;
         var url = "https://www.strava.com/api/v3/activities/" + id + "/related";
 
-        return HTTP.call('GET', url, {
+        var response = HTTP.call('GET', url, {
             headers: {
                 "Authorization": "Bearer " + token
             }
-        });;
+        });
+
+        return response;
     },
     requestActivityByActivityId: function(id) {
         var token = Meteor.user().services.strava.accessToken;
         var url = "https://www.strava.com/api/v3/activities/" + id;
 
-        return HTTP.call('GET', url, {
+        var response = HTTP.call('GET', url, {
             headers: {
                 "Authorization": "Bearer " + token
             }
-        });;
-    }
-});
+        });
 
-Meteor.startup(() => {});
+        return response;
+    },
+});
