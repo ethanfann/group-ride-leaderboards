@@ -5,10 +5,6 @@ import {
     HTTP
 } from 'meteor/http';
 
-Meteor.startup(function(){
-  Kadira.connect('J5ZaR34WnN6p6hbpH', 'fc72b9e2-0b89-4392-9ac4-945e2b3385ec');
-});
-
 Meteor.publish("userData", function () {
     return Meteor.users.find({_id: this.userId});
 });
