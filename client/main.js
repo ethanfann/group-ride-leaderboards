@@ -80,7 +80,7 @@ Template.leaderboards.helpers({
             });
         }
 
-        return Template.instance().max_speeds.get().slice(0, 5);
+        return Template.instance().max_speeds.get();
     },
     get_max_watts: function() {
         if (Template.instance().max_watts_sort.get() == true)
