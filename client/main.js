@@ -80,7 +80,7 @@ Template.leaderboards.helpers({
             });
         }
 
-        return Template.instance().max_speeds.get();
+        return Template.instance().max_speeds.get().slice(0,10);
     },
     get_max_watts: function() {
         if (Template.instance().max_watts_sort.get() == true)
@@ -92,7 +92,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().max_watts.get().slice(0, 5);
+        return Template.instance().max_watts.get().slice(0, 10);
     },
     get_average_heartrates: function() {
         if (Template.instance().average_heartrates_sort.get() == true)
@@ -104,7 +104,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().average_heartrates.get().slice(0, 5);
+        return Template.instance().average_heartrates.get().slice(0, 10);
     },
     get_max_heartrates: function() {
         if (Template.instance().max_heartrates_sort.get() == true)
@@ -116,7 +116,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().max_heartrates.get().slice(0, 5);
+        return Template.instance().max_heartrates.get().slice(0, 10);
     },
     get_kudos_counts: function() {
         if (Template.instance().kudos_counts_sort.get() == true)
@@ -128,7 +128,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().kudos_counts.get().slice(0, 5);
+        return Template.instance().kudos_counts.get().slice(0, 10);
     },
     get_average_cadences: function() {
         if (Template.instance().average_cadences_sort.get() == true)
@@ -140,7 +140,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().average_cadences.get().slice(0, 5);
+        return Template.instance().average_cadences.get().slice(0, 10);
     },
     get_average_watts: function() {
         if (Template.instance().average_watts_sort.get() == true)
@@ -152,7 +152,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().average_watts.get().slice(0, 5);
+        return Template.instance().average_watts.get().slice(0, 10);
     },
     get_suffer_scores: function() {
         if (Template.instance().suffer_scores_sort.get() == true)
@@ -164,7 +164,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().suffer_scores.get().slice(0, 5);
+        return Template.instance().suffer_scores.get().slice(0, 10);
     },
     get_kilojoules: function() {
         if (Template.instance().kilojoules_sort.get() == true)
@@ -176,7 +176,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().kilojoules.get().slice(0, 5);
+        return Template.instance().kilojoules.get().slice(0, 10);
     },
     get_average_speeds: function() {
         if (Template.instance().average_speeds_sort.get() == true)
@@ -188,7 +188,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().average_speeds.get().slice(0, 5);
+        return Template.instance().average_speeds.get().slice(0, 10);
     },
     get_achievements: function() {
         if (Template.instance().achievements_sort.get() == true)
@@ -200,7 +200,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().achievements.get().slice(0, 5);
+        return Template.instance().achievements.get().slice(0, 10);
     },
     get_weighted_avg_watts: function() {
         if (Template.instance().weighted_avg_watts_sort.get() == true)
@@ -212,7 +212,7 @@ Template.leaderboards.helpers({
                 return a.value - b.value;
             });
         }
-        return Template.instance().weighted_avg_watts.get().slice(0, 5);
+        return Template.instance().weighted_avg_watts.get().slice(0, 10);
     },
     max_speeds_sort: function() {
         return Template.instance().max_speeds_sort.get();
