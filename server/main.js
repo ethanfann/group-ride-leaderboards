@@ -5,33 +5,45 @@ import {
     HTTP
 } from 'meteor/http';
 
-Meteor.publish("userData", function () {
-    return Meteor.users.find({_id: this.userId});
+Meteor.publish("userData", function() {
+    return Meteor.users.find({
+        _id: this.userId
+    });
 });
 
 Meteor.methods({
     requestRelatedActivitiesByActivityId: function(id) {
+        this.unblock();
         var token = Meteor.user().services.strava.accessToken;
         var url = "https://www.strava.com/api/v3/activities/" + id + "/related";
 
-        var response = HTTP.call('GET', url, {
+        return HTTP.call('GET', url, {
             headers: {
                 "Authorization": "Bearer " + token
             }
         });
 
-        return response;
     },
     requestActivityByActivityId: function(id) {
+        this.unblock();
         var token = Meteor.user().services.strava.accessToken;
         var url = "https://www.strava.com/api/v3/activities/" + id;
 
-        var response = HTTP.call('GET', url, {
+        return HTTP.call('GET', url, {
             headers: {
                 "Authorization": "Bearer " + token
             }
         });
-
-        return response;
     },
+    requestAthleteUnitPreference: function() {
+      this.unblock();
+      var token = Meteor.user().services.strava.accessToken;
+      var url = "https://www.strava.com/api/v3/athlete";
+
+      return HTTP.call('GET', url, {
+          headers: {
+              "Authorization": "Bearer " + token
+          }
+      });
+    }
 });
