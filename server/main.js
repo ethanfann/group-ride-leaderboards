@@ -4,6 +4,9 @@ import {
 import {
     HTTP
 } from 'meteor/http';
+import {
+    EJSON
+} from 'meteor/ejson';
 
 Meteor.publish("userData", function() {
     return Meteor.users.find({
@@ -45,5 +48,5 @@ Meteor.methods({
               "Authorization": "Bearer " + token
           }
       });
-    }
+    },
 });

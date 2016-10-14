@@ -8,12 +8,7 @@ import {
 
 import './main.html';
 
-$(document).ready(function() {
-    $('.parallax').parallax();
-    $('.modal-trigger').leanModal();
-});
-
-Meteor.startup(function() {
+Tracker.autorun(function() {
     Meteor.subscribe('userData');
 });
 
@@ -27,6 +22,8 @@ AccountsTemplates.configure({
 });
 
 Template.leaderboards.onCreated(function() {
+    Session.set("measurement_preference", "");
+
     this.max_speeds = new ReactiveArray();
     this.max_speeds_sort = new ReactiveVar(true);
 
@@ -68,152 +65,153 @@ Handlebars.registerHelper("plusOne", function(argument) {
     return parseInt(argument) + 1;
 });
 
-Template.leaderboards.helpers({
-    get_max_speeds: function() {
-        if (Template.instance().max_speeds_sort.get() == true)
-            Template.instance().max_speeds.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().max_speeds.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
 
-        return Template.instance().max_speeds.get().slice(0,10);
-    },
-    get_max_watts: function() {
-        if (Template.instance().max_watts_sort.get() == true)
-            Template.instance().max_watts.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().max_watts.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().max_watts.get().slice(0, 10);
-    },
-    get_average_heartrates: function() {
-        if (Template.instance().average_heartrates_sort.get() == true)
-            Template.instance().average_heartrates.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().average_heartrates.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().average_heartrates.get().slice(0, 10);
-    },
-    get_max_heartrates: function() {
-        if (Template.instance().max_heartrates_sort.get() == true)
-            Template.instance().max_heartrates.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().max_heartrates.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().max_heartrates.get().slice(0, 10);
-    },
-    get_kudos_counts: function() {
-        if (Template.instance().kudos_counts_sort.get() == true)
-            Template.instance().kudos_counts.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().kudos_counts.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().kudos_counts.get().slice(0, 10);
-    },
-    get_average_cadences: function() {
-        if (Template.instance().average_cadences_sort.get() == true)
-            Template.instance().average_cadences.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().average_cadences.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().average_cadences.get().slice(0, 10);
-    },
-    get_average_watts: function() {
-        if (Template.instance().average_watts_sort.get() == true)
-            Template.instance().average_watts.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().average_watts.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().average_watts.get().slice(0, 10);
-    },
-    get_suffer_scores: function() {
-        if (Template.instance().suffer_scores_sort.get() == true)
-            Template.instance().suffer_scores.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().suffer_scores.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().suffer_scores.get().slice(0, 10);
-    },
-    get_kilojoules: function() {
-        if (Template.instance().kilojoules_sort.get() == true)
-            Template.instance().kilojoules.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().kilojoules.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().kilojoules.get().slice(0, 10);
-    },
-    get_average_speeds: function() {
-        if (Template.instance().average_speeds_sort.get() == true)
-            Template.instance().average_speeds.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().average_speeds.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().average_speeds.get().slice(0, 10);
-    },
-    get_achievements: function() {
-        if (Template.instance().achievements_sort.get() == true)
-            Template.instance().achievements.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().achievements.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().achievements.get().slice(0, 10);
-    },
-    get_weighted_avg_watts: function() {
-        if (Template.instance().weighted_avg_watts_sort.get() == true)
-            Template.instance().weighted_avg_watts.sort(function(a, b) {
-                return b.value - a.value;
-            });
-        else {
-            Template.instance().weighted_avg_watts.sort(function(a, b) {
-                return a.value - b.value;
-            });
-        }
-        return Template.instance().weighted_avg_watts.get().slice(0, 10);
-    },
+Template.leaderboards.helpers({
+  get_max_speeds: function() {
+      if (Template.instance().max_speeds_sort.get() == true)
+          Template.instance().max_speeds.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().max_speeds.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+
+      return Template.instance().max_speeds.get().slice(0,10);
+  },
+  get_max_watts: function() {
+      if (Template.instance().max_watts_sort.get() == true)
+          Template.instance().max_watts.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().max_watts.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().max_watts.get().slice(0, 10);
+  },
+  get_average_heartrates: function() {
+      if (Template.instance().average_heartrates_sort.get() == true)
+          Template.instance().average_heartrates.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().average_heartrates.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().average_heartrates.get().slice(0, 10);
+  },
+  get_max_heartrates: function() {
+      if (Template.instance().max_heartrates_sort.get() == true)
+          Template.instance().max_heartrates.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().max_heartrates.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().max_heartrates.get().slice(0, 10);
+  },
+  get_kudos_counts: function() {
+      if (Template.instance().kudos_counts_sort.get() == true)
+          Template.instance().kudos_counts.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().kudos_counts.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().kudos_counts.get().slice(0, 10);
+  },
+  get_average_cadences: function() {
+      if (Template.instance().average_cadences_sort.get() == true)
+          Template.instance().average_cadences.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().average_cadences.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().average_cadences.get().slice(0, 10);
+  },
+  get_average_watts: function() {
+      if (Template.instance().average_watts_sort.get() == true)
+          Template.instance().average_watts.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().average_watts.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().average_watts.get().slice(0, 10);
+  },
+  get_suffer_scores: function() {
+      if (Template.instance().suffer_scores_sort.get() == true)
+          Template.instance().suffer_scores.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().suffer_scores.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().suffer_scores.get().slice(0, 10);
+  },
+  get_kilojoules: function() {
+      if (Template.instance().kilojoules_sort.get() == true)
+          Template.instance().kilojoules.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().kilojoules.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().kilojoules.get().slice(0, 10);
+  },
+  get_average_speeds: function() {
+      if (Template.instance().average_speeds_sort.get() == true)
+          Template.instance().average_speeds.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().average_speeds.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().average_speeds.get().slice(0, 10);
+  },
+  get_achievements: function() {
+      if (Template.instance().achievements_sort.get() == true)
+          Template.instance().achievements.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().achievements.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().achievements.get().slice(0, 10);
+  },
+  get_weighted_avg_watts: function() {
+      if (Template.instance().weighted_avg_watts_sort.get() == true)
+          Template.instance().weighted_avg_watts.sort(function(a, b) {
+              return b.value - a.value;
+          });
+      else {
+          Template.instance().weighted_avg_watts.sort(function(a, b) {
+              return a.value - b.value;
+          });
+      }
+      return Template.instance().weighted_avg_watts.get().slice(0, 10);
+  },
     max_speeds_sort: function() {
         return Template.instance().max_speeds_sort.get();
     },
@@ -259,27 +257,48 @@ Template.leaderboards.events({
 
         var input = event.target.activityInput.value;
 
-        if (input.toLowerCase().includes("strava.com") == true) {
+        console.log(input);
+
+        var id = "";
+        if (input.toLowerCase().includes("strava.com/") && input.toLowerCase().includes("/activities/")) {
             result = input.split('/');
             id = result[result.length - 1];
-        } else {
-            id = input;
         }
 
-        template.max_speeds.get().length = 0;
-        template.max_watts.get().length = 0;
-        template.average_heartrates.get().length = 0;
-        template.max_heartrates.get().length = 0;
-        template.kudos_counts.get().length = 0;
-        template.average_cadences.get().length = 0;
-        template.average_watts.get().length = 0;
-        template.suffer_scores.get().length = 0;
-        template.kilojoules.get().length = 0;
-        template.average_speeds.get().length = 0;
-        template.achievements.get().length = 0;
-        template.weighted_avg_watts.get().length = 0;
+        console.log(Number(id));
 
-        if (id != "") {
+        if (Number(id) != 0) {
+
+            template.max_speeds.get().length = 0;
+            template.max_watts.get().length = 0;
+            template.average_heartrates.get().length = 0;
+            template.max_heartrates.get().length = 0;
+            template.kudos_counts.get().length = 0;
+            template.average_cadences.get().length = 0;
+            template.average_watts.get().length = 0;
+            template.suffer_scores.get().length = 0;
+            template.kilojoules.get().length = 0;
+            template.average_speeds.get().length = 0;
+            template.achievements.get().length = 0;
+            template.weighted_avg_watts.get().length = 0;
+
+
+            Meteor.call("requestAthleteUnitPreference", function(error, result) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    var json = EJSON.parse(result.content);
+
+                    if (json.measurement_preference == "feet") {
+                        Session.set("measurement_preference", "mph");
+                        Session.set("conversion_factor", 2.23694)
+                    } else {
+                        Session.set("measurement_preference", "kmh");
+                        Session.set("conversion_factor", 3.6);
+                    }
+                }
+            });
+
             Meteor.call("requestActivityByActivityId", id, function(error, result) {
                 if (error) {
                     console.log(error);
@@ -295,9 +314,11 @@ Template.leaderboards.events({
                         var picURL = json.athlete.profile_medium;
                     }
 
+                    console.log(Session.get("measurement_preference"));
                     var max_speedEntry = {
                         name: name,
-                        value: (json.max_speed * 2.236936).toFixed(1),
+                        value: (json.max_speed * Session.get("conversion_factor")).toFixed(1),
+                        unit: Session.get("measurement_preference"),
                         stravaURL: "https://www.strava.com/activities/" + json.id,
                         picURL: picURL
                     };
@@ -351,7 +372,8 @@ Template.leaderboards.events({
                     };
                     var average_speedEntry = {
                         name: name,
-                        value: (json.average_speed * 2.236936).toFixed(1),
+                        value: (json.average_speed * Session.get("conversion_factor")).toFixed(1),
+                        unit: Session.get("measurement_preference"),
                         stravaURL: "https://www.strava.com/activities/" + json.id,
                         picURL: picURL
                     };
@@ -401,7 +423,8 @@ Template.leaderboards.events({
                     for (var i = 0; i < json.length; i++) {
                         var max_speedEntry = {
                             name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                            value: (json[i].max_speed * 2.236936).toFixed(1),
+                            value: (json[i].max_speed * Session.get("conversion_factor")).toFixed(1),
+                            unit: Session.get("measurement_preference"),
                             stravaURL: "https://www.strava.com/activities/" + json[i].id,
                             picURL: json[i].athlete.profile_medium
                         };
@@ -455,7 +478,8 @@ Template.leaderboards.events({
                         };
                         var average_speedEntry = {
                             name: json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                            value: (json[i].average_speed * 2.236936).toFixed(1),
+                            value: (json[i].average_speed * Session.get("conversion_factor")).toFixed(1),
+                            unit: Session.get("measurement_preference"),
                             stravaURL: "https://www.strava.com/activities/" + json.id,
                             picURL: json[i].athlete.profile_medium
                         };
@@ -495,6 +519,8 @@ Template.leaderboards.events({
                     }
                 }
             });
+        } else {
+            Materialize.toast('Looks like there was something wrong with the url', 4000);
         }
     },
     'click #max_speeds_sort': function(event, template) {
@@ -580,5 +606,5 @@ Template.leaderboards.events({
         } else {
             template.weighted_avg_watts_sort.set(true);
         }
-    },
+    }
 });

@@ -1,299 +1,301 @@
 <head>
-    <title>Freds</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Freds</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <!-- {{> header}} -->
-    </header>
+  <header>
+    <!-- {{> header}} -->
+  </header>
 
-    <main>
-        {{#if currentUser}} {{> leaderboards}} {{else}}
-        <div class="container">
-            <div class="row">
-                <div class="loginButton">
-                    {{> atForm}}
-                </div>
-            </div>
+  <main>
+    {{#if currentUser}} {{> leaderboards}} {{else}}
+    <div class="container">
+      <div class="row">
+        <div class="loginButton">
+          {{> atForm}}
         </div>
-        {{/if}} {{> banner}}
-    </main>
+      </div>
+    </div>
+    {{/if}} {{> banner}}
+  </main>
 
-    <footer>
-        {{> footer}}
-    </footer>
+  <footer>
+    {{> footer}}
+  </footer>
 </body>
 
 <template name="header">
-    <nav class="cyan darken-4">
-        <div class="nav-wrapper">
-            <div class="container">
-                <span id="titleText" class="brand-logo">Freds</span>
-                <ul id="navbarLinks" class="right">
-                </ul>
-            </div>
-        </div>
-    </nav>
+  <nav class="cyan darken-4">
+    <div class="nav-wrapper">
+      <a class="brand-logo center">Freds</a>
+      <div class="container">
+        <ul class="right hide-on-med-and-down">
+        </ul>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <template name="banner">
-    <div id="banner" class="container z-depth-1">
-        <div class="row">
-            <div class="col s12 m12 l4">
-                <div class="center promo promo-example">
-                    <i class="material-icons">language</i>
-                    <p class="promo-caption">1. Sign in with Strava</p>
-                    <p class="light center">Connecting to Strava gives us access to all the ride data we need to display the leaderboards</p>
-                </div>
-            </div>
-            <div class="col s12 m12 l4">
-                <div class="center promo promo-example">
-                    <i class="material-icons">launch</i>
-                    <p class="promo-caption">2. Find a ride activity url</p>
-                    <p class="light center">Navigate to a Strava activity then copy down the url located in your browser's address bar</p>
-                </div>
-            </div>
-            <div class="col s12 m12 l4">
-                <div class="center promo promo-example">
-                    <i class="material-icons">reorder</i>
-                    <p class="promo-caption">3. Enjoy the leaderboards!</p>
-                    <p class="light center">Data will appear in the lists after submitting the url</p>
-                </div>
-            </div>
+  <div id="banner" class="container z-depth-1">
+    <div class="row">
+      <div class="col s12 m12 l4">
+        <div class="center promo promo-example">
+          <i class="material-icons">language</i>
+          <p class="promo-caption">1. Sign in with Strava</p>
+          <p class="light center">Connecting to Strava gives us access to all the ride data we need to display the leaderboards</p>
         </div>
+      </div>
+      <div class="col s12 m12 l4">
+        <div class="center promo promo-example">
+          <i class="material-icons">launch</i>
+          <p class="promo-caption">2. Find a ride activity url</p>
+          <p class="light center">Navigate to a Strava activity then copy down the url located in your browser's address bar</p>
+        </div>
+      </div>
+      <div class="col s12 m12 l4">
+        <div class="center promo promo-example">
+          <i class="material-icons">reorder</i>
+          <p class="promo-caption">3. Enjoy the leaderboards!</p>
+          <p class="light center">Data will appear in the lists after submitting the url</p>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 
 <template name="leaderboards">
-    <div id="inputContainer" class="container">
-        <form>
-            <div class="container">
-                <div class="row">
-                    <div class="input-field center-align">
-                        <input placeholder="https://www.strava.com/activities/539670567" type="text" name="activityInput" autocomplete="off">
-                        <button class="waves-effect waves-light btn center-align" style="background-color: #FC4C02;" type="submit">Display</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="leaderboardsContainer">
-        <div class="container">
-            <div class="row">
-                <div class="col s12 m12 l4">
-                    <ul id="max_speed_container" class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Max Speed</h4><a id="max_speeds_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_max_speeds}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left valign-wrapper" style="margin-right: 5px;">
-                            <div class="valign">{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} mph</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Avg Speed</h4>
-                            <a id="average_speeds_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_average_speeds}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} mph</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Max Power</h4>
-                            <a id="max_watts_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_max_watts}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} W</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Avg Power</h4>
-                            <a id="average_watts_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_average_watts}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} W</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Max Heartrate</h4>
-                            <a id="max_heartrates_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_max_heartrates}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} bpm</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Avg Heartrate</h4>
-                            <a id="average_heartrates_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_average_heartrates}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} bpm</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Work</h4>
-                            <a id="work_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_kilojoules}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} kJ</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1 truncate">
-                        <li class="collection-header ">
-                            <h4>Avg Cadence</h4>
-                            <a id="avg_cadence_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_average_cadences}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} rpm</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Suffer Score</h4>
-                            <a id="suffer_score_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_suffer_scores}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}}</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Kudos</h4>
-                            <a id="kudos_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_kudos_counts}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}}</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Achievements</h4>
-                            <a id="achievements_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_achievements}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}}</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-                <div class="col s12 m12 l4">
-                    <ul class="collection with-header z-depth-1">
-                        <li class="collection-header">
-                            <h4>Weighted Avg Power</h4>
-                            <a id="weighted_avg_watts_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
-                        </li>
-                        {{#each get_weighted_avg_watts}}
-                        <li class="collection-item truncate">
-                            <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
-                            <div>{{plusOne @index}}. {{name}}</div>
-                            <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} W</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                </div>
-            </div>
+  <div id="inputContainer" class="container">
+    <form>
+      <div class="container">
+        <div class="row">
+          <div class="input-field center-align">
+            <input placeholder="https://www.strava.com/activities/539670567" type="text" name="activityInput" autocomplete="off">
+            <button class="waves-effect waves-light btn center-align" style="background-color: #FC4C02;" type="submit">Display</button>
+          </div>
         </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="leaderboardsContainer">
+    <div class="container">
+      <div class="row">
+        <div class="col s12 m12 l4">
+          <ul id="max_speed_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Max Speed</h4><a id="max_speeds_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_max_speeds}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} {{unit}}</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="average_speeds_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Avg Speed</h4>
+              <a id="average_speeds_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_average_speeds}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} {{unit}}</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="max_watts_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Max Power</h4>
+              <a id="max_watts_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_max_watts}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} W</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m12 l4">
+          <ul id="average_watts_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Avg Power</h4>
+              <a id="average_watts_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_average_watts}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} W</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="max_heartrates_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Max Heartrate</h4>
+              <a id="max_heartrates_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_max_heartrates}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} bpm</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="average_heartrates_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Avg Heartrate</h4>
+              <a id="average_heartrates_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_average_heartrates}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} bpm</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m12 l4">
+          <ul id="kilojoules_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Work</h4>
+              <a id="work_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_kilojoules}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} kJ</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="average_cadences_container" class="collection with-header z-depth-1">
+            <li class="collection-header ">
+              <h4>Avg Cadence</h4>
+              <a id="avg_cadence_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_average_cadences}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} rpm</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="suffer_scores_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Suffer Score</h4>
+              <a id="suffer_score_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_suffer_scores}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}}</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12 m12 l4">
+          <ul id="kudos_counts_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Kudos</h4>
+              <a id="kudos_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_kudos_counts}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}}</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="achievements_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Achievements</h4>
+              <a id="achievements_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_achievements}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}}</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="col s12 m12 l4">
+          <ul id="weighted_avg_watts_container" class="collection with-header z-depth-1">
+            <li class="collection-header">
+              <h4>Weighted Avg Power</h4>
+              <a id="weighted_avg_watts_sort" class="waves-effect cyan darken-4 waves-light btn"><i class="material-icons">swap_vert</i></a>
+            </li>
+            {{#each get_weighted_avg_watts}}
+            <li class="collection-item truncate">
+              <img src={{picURL}} alt="" class="circle left" style="margin-right: 5px;">
+              <div>{{plusOne @index}}. {{name}}</div>
+              <a href={{stravaURL}} class="secondary-content right" target="_blank">{{value}} W</a>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <template name="footer">
-    <footer class="page-footer cyan darken-4">
-        <div class="container">
-            <div class="row">
-                <div class="col l5 s12">
-                    <h5 class="white-text">Leaderboards for your group ride</h5>
-                    <p class="grey-text text-lighten-4">Made possible with Strava</p>
-                </div>
-                <!-- <div class="col l7 s12">
-                    <h5 class="white-text">Contact</h5>
-                    <ul class="contactList">
-                        <li><a id="github-button" class="waves-effect waves-light brown btn" title="github" href="https://github.com/ethanfann/freds"><i></i><span class="label"><b>Github</b></span></a></li>
-                        <li><a id="twitter-button" class="waves-effect waves-light blue btn" title="twitter" href="https://twitter.com/ethancord"><i></i><span class="label"><b>Twitter</b></span></a></li>
-                        <li><a id="strava-button" class="waves-effect waves-light btn" title="strava" style="background-color: #FC4C02;" href="https://www.strava.com/athletes/5922716"><i></i><span class="label"><b>Strava</b></span></a></li>
-                    </ul>
-                </div> -->
-            </div>
+  <footer class="page-footer cyan darken-4">
+    <div class="container">
+      <div class="row">
+        <div class="col l5 s12">
+          <h5 class="white-text">Leaderboards for your group ride</h5>
+          <p class="grey-text text-lighten-4">Powered by Strava</p>
         </div>
-        <div class="footer-copyright">
-            <div class="container">
-                © 2016 Ethan Fann
-            </div>
+        <div class="col l7 s12">
+          <h5 class="white-text">Contact</h5>
+          <ul class="contactList">
+            <li><a id="github-button" class="waves-effect waves-light brown btn" title="github" href="https://github.com/ethanfann/freds"><i></i><span class="label"><b>Github</b></span></a></li>
+            <li><a id="twitter-button" class="waves-effect waves-light blue btn" title="twitter" href="https://twitter.com/ethancord"><i></i><span class="label"><b>Twitter</b></span></a></li>
+            <li><a id="strava-button" class="waves-effect waves-light btn" title="strava" style="background-color: #FC4C02;" href="https://www.strava.com/athletes/5922716"><i></i><span class="label"><b>Strava</b></span></a></li>
+          </ul>
         </div>
-    </footer>
+
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        © 2016 Ethan Fann
+      </div>
+    </div>
+  </footer>
 </template>
