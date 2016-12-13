@@ -6,64 +6,91 @@ body {
     background-attachment: fixed;
     background-position: center;
     background-size: cover;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), url('/images/background.jpg');
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), url('/images/background.jpg');
+    background-color: white;
 }
 main {
     margin-top: 15vh;
     flex: 1 0 auto;
 }
-#inputContainer {
+
+li img {
+    margin-right: 10px;
+}
+
+#urlInput {
     padding-top: 25px;
-}
-input {
     text-align: center;
-    color: white;
 }
+
 .at-social-btn {
     background-color: #FC4C02;
     width: 50px;
 }
-.contactList li {
+
+.contactLinkList li {
     display: inline;
     padding-left: 5px;
 }
+
+.collection {
+    border: none;
+}
+
 .promo i {
     margin: 40px 0;
     color: #FC4C02;
-    font-size: 7rem;
+    font-size: 6rem;
     display: block;
 }
+
 .loginButton {
     margin: 0 auto;
     width: 200px;
     padding-top: 25vh;
 }
+
 #banner {
     background: white;
     padding-left: 15px;
     padding-right: 25px;
 }
-#title {
-    color: white;
-}
-.input-field input[type=text]:focus {
-    border-bottom: 1px solid #FC4C02;
-    box-shadow: 0 1px 0 0 #FC4C02;
-}
-.input-field textarea[type=text]:focus {
-    border-bottom: 1px solid #FC4C02;
-    box-shadow: 0 1px 0 0 #FC4C02;
-}
-#navbarLinks {
-    padding-top: 5px;
-}
+
 .secondary-content {
     color: #FC4C02;
 }
+
 .circle {
     height: 45px;
     width: 45px;
 }
+
 input:focus::-webkit-input-placeholder {
     opacity: 0;
 }
+input:focus {
+    background-color: black;
+}
+
+#leaderboard {
+    height: 400px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+input[type="text"] {
+    background-color: white;
+    text-align: center;
+}
+
+input[type="text"]:focus {
+    background-color: turquoise;
+    opacity: 5;
+    text-align: center;
+}
+
+#loadingBar {
+    margin-top: 5vh;
+}
+
+
