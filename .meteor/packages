@@ -33,3 +33,5 @@ kadira:debug
 iron:router
 manuel:reactivearray
 underscore@1.0.10
+miktam:loggly
+okgrow:analytics

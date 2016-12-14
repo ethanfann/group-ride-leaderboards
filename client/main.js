@@ -16,10 +16,6 @@ Template.registerHelper('profilePic', function() {
     return Meteor.user().services.strava.profile_medium;
 });
 
-Template.registerHelper('userName', function() {
-    return Meteor.user().s;
-});
-
 Handlebars.registerHelper("plusOne", function(argument) {
     return parseInt(argument) + 1;
 });
@@ -73,19 +69,29 @@ Template.input.events({
     'submit form' (event, template) {
         event.preventDefault();
         let input = event.target.activityInput.value;
-        console.log(input);
 
         let id = "";
-        if (input.toLowerCase().includes("strava.com/") && input.toLowerCase().includes("/activities/")) {
-            result = input.split('/');
-            id = result[result.length - 1];
+        let splitResult = [];
+        let flag = false;
+        if (input.toLowerCase().includes("strava.com") && input.toLowerCase().includes("activities")) {
+
+            splitResult = input.split('/');
+
+            splitResult.forEach(function (potentialId) {
+                if(Number(potentialId) != 0) {
+                    id = potentialId;
+                    flag = true;
+                }
+            });
         }
 
-        if (Number(id) != 0) {
-            Router.go("/" + id);
+        if(flag){
+            Router.go('/' + id);
         } else {
             Materialize.toast('Looks like there was something wrong with the url', 4000);
+            Logger.log({"Raw Input":input,"splitResult": splitResult, "Extracted Id": id})
         }
+
     },
 });
 

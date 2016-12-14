@@ -59,6 +59,7 @@ meteor@1.6.0
 meteor-base@1.0.4
 meteorhacks:kadira@2.30.0
 meteorhacks:meteorx@1.4.1
+miktam:loggly@2.0.0
 minifier-css@1.2.14_1
 minifier-js@1.2.15
 minimongo@1.0.18
@@ -73,6 +74,7 @@ npm-mongo@2.2.11_2
 oauth@1.1.11
 oauth2@1.1.10
 observe-sequence@1.0.12
+okgrow:analytics@2.0.1
 ordered-dict@1.0.9
 promise@0.8.8
 random@1.0.10

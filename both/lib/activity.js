@@ -35,7 +35,7 @@ class _Activity {
             'unit': "W"
         };
         this.weightedAvgWatts = {
-            'value': (activity.device_watts == true ? activity.max_watts : 0),
+            'value': (activity.device_watts == true ? activity.weighted_average_watts : 0),
             'unit': "W"
         };
         this.maxHr = {

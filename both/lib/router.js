@@ -14,9 +14,6 @@ if(Meteor.isClient) {
     Router.route('/', function() {
         this.render("leaderboards");
     });
-    Router.route('/contact', function() {
-        this.render("email");
-    });
     Router.route('/:id',{
         waitOn : function(){
             let id = this.params.id;
