@@ -87,10 +87,23 @@ Meteor.publish('leaderboards', function (id) {
             if (response) {
                 let json = EJSON.parse(response.content);
 
+                let name = "";
+                let gender = "";
+                let picUrl = "";
+                if(json.athlete.resource_state == "1") {
+                    name = user.services.strava.firstname + " " + user.services.strava.lastname;
+                    gender = user.services.strava.sex;
+                    picUrl = user.services.strava.profile_medium;
+                } else {
+                    name = json.athlete.firstname + " " + json.athlete.lastname;
+                    gender = json.athlete.sex;
+                    picUrl = json.athlete.profile_medium;
+                }
+
                 let athlete = {
-                    'name': user.services.strava.firstname + " " + user.services.strava.lastname,
-                    'gender': user.services.strava.sex,
-                    'picUrl': user.services.strava.profile_medium,
+                    'name': name,
+                    'gender': gender,
+                    'picUrl': picUrl,
                 };
 
                 let activity = new Activity(json, athlete);
