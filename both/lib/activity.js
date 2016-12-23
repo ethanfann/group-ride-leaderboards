@@ -72,14 +72,11 @@ class _Activity {
         };
     }
     transformEntry(value, unit){
-        return {
-            'name': this.athlete.name,
-            'picUrl': this.athlete.picUrl,
-            'gender': this.athlete.gender,
+        return _.extend(this.athlete, {
             'stravaUrl': "https://www.strava.com/activities/" + this.id,
             'value': value,
             'unit': unit,
-        };
+        });
     }
     getMaxSpeed(unit){
         if(unit == "mph"){

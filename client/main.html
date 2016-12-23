@@ -37,7 +37,7 @@
             <div class="nav-wrapper z-depth-5">
                 <div class="container">
                     <a href="/" class="brand-logo left">Freds</a>
-                    <div class="row">
+                    <div  class="row">
                         <ul class="right">
                             {{#if currentUser}}
                                 {{> recentActivities}}
@@ -63,8 +63,8 @@
     <span class='dropdown-button btn lime darken-1' data-activates='dropdown1'>Recent Activities</span>
     <ul id='dropdown1' class='dropdown-content'>
         {{#each recentActivities}}
-            <li>
-                <a style="color: turquoise" href={{this.id}}>{{plusOne @index}}. {{this.title}}</a>
+            <li style="cursor: pointer">
+                <a style="color: turquoise; cursor: pointer" href={{this.id}}>{{plusOne @index}}. {{this.title}}</a>
             </li>
         {{/each}}
     </ul>

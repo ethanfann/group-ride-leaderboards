@@ -12,20 +12,20 @@ import './main.html';
 let recentActivities = new ReactiveArray();
 Leaderboards = new Meteor.Collection('leaderboards');
 
-Template.registerHelper('profilePic', function() {
-    return Meteor.user().services.strava.profile_medium;
-});
-
+// Adds +1 to the value of the index when displaying leaderboards.
+// Instead of 0,1,2,3... we have 1,2,3,4...
 Handlebars.registerHelper("plusOne", function(argument) {
     return parseInt(argument) + 1;
 });
 
+// Retrieves the athletes profile when the website is loaded
 Tracker.autorun(function () {
     Meteor.subscribe('userData');
 });
 
 /* --------------RECENT ACTIVITIES --------------*/
 
+// Retrieve
 Template.recentActivities.onRendered(function(){
     Meteor.call("requestAthleteRecentActivities", function(error, result) {
         if (error) {
@@ -37,7 +37,7 @@ Template.recentActivities.onRendered(function(){
         }
     });
     this.$(".dropdown-button").dropdown({
-        belowOrigin: true // Displays dropdown below the button
+        belowOrigin: true,
     });
 });
 
@@ -66,7 +66,7 @@ Template.leaderboards.helpers({
 /* --------------INPUT --------------*/
 
 Template.input.events({
-    'submit form' (event, template) {
+    'submit form' (event) {
         event.preventDefault();
         let input = event.target.activityInput.value;
 
@@ -95,9 +95,3 @@ Template.input.events({
     },
 });
 
-/* --------------INPUT --------------*/
-
-Template.footer.onRendered(function(){
-    $('.modal-trigger').leanModal();
-    $('select').material_select();
-});

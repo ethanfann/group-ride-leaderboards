@@ -13,6 +13,10 @@ main {
     flex: 1 0 auto;
 }
 
+nav ul li a{
+    color: black;
+}
+
 li img {
     margin-right: 10px;
 }
@@ -110,5 +114,8 @@ input[type="text"]:focus {
     background: rgba(0,0,0,0.61);
     -webkit-border-radius: 100px;
 }
+
+
+
 
 

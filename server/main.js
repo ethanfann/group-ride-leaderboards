@@ -10,6 +10,18 @@ Meteor.publish("userData", function () {
     });
 });
 
+Meteor.publish('completeActivities', function() {
+    let self = this;
+    let user = Meteor.users.findOne(self.userId);
+
+    Meteor.call('requestCompleteAthleteActivities',user,function (error, response) {
+        if (response)
+            Logger.info(result);
+        else
+            console.log(error);
+    });
+});
+
 Meteor.publish('leaderboards', function (id) {
     let self = this;
     let user = Meteor.users.findOne(self.userId);
@@ -209,6 +221,42 @@ Meteor.methods({
             activities.push(activity);
         }
 
+        return activities;
+    },
+    requestCompleteAthleteActivities: function(user) {
+        let token = user.services.strava.accessToken;
+        let url = "https://www.strava.com/api/v3/athlete/activities";
+
+        let moreActivities = true;
+        let page = 1;
+        let activities = [];
+
+        while(moreActivities) {
+            let response = HTTP.call('GET', url, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                data: {
+                    "page": page,
+                    "per_page": 200,
+                }
+            });
+            let json = EJSON.parse(response.content);
+
+            json.forEach(function (activity) {
+                activities.push({
+                    'title': activity.name,
+                    'id': activity.id,
+                    'date': activity.start_date,
+                });
+            });
+
+            if(json.length == 200) {
+                page++;
+            } else {
+                moreActivities = false;
+            }
+        }
         return activities;
     },
 });
