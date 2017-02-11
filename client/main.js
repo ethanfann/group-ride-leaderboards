@@ -9,6 +9,15 @@ import './main.html';
 
 /* --------------GLOBAL --------------*/
 
+AccountsTemplates.configure({
+    hideSignUpLink: true,
+    texts: {
+        title: {
+            signIn: "",
+        }
+    }
+});
+
 let recentActivities = new ReactiveArray();
 Leaderboards = new Meteor.Collection('leaderboards');
 
@@ -89,9 +98,10 @@ Template.input.events({
             Router.go('/' + id);
         } else {
             Materialize.toast('Looks like there was something wrong with the url', 4000);
-            Logger.log({"Raw Input":input,"splitResult": splitResult, "Extracted Id": id})
         }
 
     },
 });
+
+
 

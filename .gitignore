@@ -2,11 +2,11 @@
 # Created by https://www.gitignore.io/api/meteorjs,macos
 
 ### Webstorm ###
-/.idea
+.idea/
 
 ### MeteorJS ###
 # default meteor build and local packages
-.meteor/local
+.meteor/local/*
 
 # meteor settings file
 settings.json
@@ -19,7 +19,7 @@ settings.json
 
 ### Node ###
 # Dependency directories
-node_modules
+node_modules/
 
 
 ### macOS ###

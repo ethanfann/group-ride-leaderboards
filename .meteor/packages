@@ -26,11 +26,7 @@ accounts-ui@1.1.9
 accounts-base@1.2.14
 service-configuration@1.0.11
 shell-server@0.2.1
-meteorhacks:kadira
 force-ssl@1.0.13
-kadira:debug
 iron:router
 manuel:reactivearray
-underscore@1.0.10
-miktam:loggly
-okgrow:analytics
+underscore

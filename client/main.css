@@ -2,11 +2,11 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    background-repeat: no-repeat;
+    /*background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-    background-size: cover;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), url('/images/background.jpg');
+    background-size: cover;*/
+    /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), url('/images/background.jpg');*/
 }
 main {
     margin-top: 15vh;
@@ -96,7 +96,7 @@ input[type="text"]:focus {
     margin-top: 5vh;
 }
 
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
     width: 8px;
     background-color: rgba(0,0,0,0);
     -webkit-border-radius: 100px;
@@ -117,5 +117,5 @@ input[type="text"]:focus {
 
 
 
-
+*/
 

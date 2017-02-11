@@ -27,7 +27,6 @@ diff-sequence@1.0.7
 ecmascript@0.6.1
 ecmascript-runtime@0.3.15
 ejson@1.0.13
-email@1.1.18
 es5-shim@4.6.15
 fastclick@1.0.12
 force-ssl@1.0.13
@@ -46,8 +45,6 @@ iron:middleware-stack@1.1.0
 iron:router@1.0.13
 iron:url@1.0.11
 jquery@1.11.9
-kadira:debug@3.2.2
-kadira:runtime-dev@0.0.1
 launch-screen@1.0.12
 less@2.6.1
 livedata@1.0.18
@@ -57,9 +54,6 @@ manuel:reactivearray@1.0.5
 materialize:materialize@0.97.5
 meteor@1.6.0
 meteor-base@1.0.4
-meteorhacks:kadira@2.30.0
-meteorhacks:meteorx@1.4.1
-miktam:loggly@2.0.0
 minifier-css@1.2.14_1
 minifier-js@1.2.15
 minimongo@1.0.18
@@ -69,12 +63,10 @@ modules@0.7.7
 modules-runtime@0.7.7
 mongo@1.1.14
 mongo-id@1.0.6
-mongo-livedata@1.0.12
 npm-mongo@2.2.11_2
 oauth@1.1.11
 oauth2@1.1.10
 observe-sequence@1.0.12
-okgrow:analytics@2.0.1
 ordered-dict@1.0.9
 promise@0.8.8
 random@1.0.10

@@ -1,3 +1,4 @@
+
 /*
 Helper class for parsing Activity responses from Strava.
 Creates objects for each metric and offers methods to return
@@ -35,7 +36,7 @@ class _Activity {
             'unit': "W"
         };
         this.weightedAvgWatts = {
-            'value': (activity.device_watts == true ? activity.weighted_average_watts : 0),
+            'value': (activity.device_watts == true ? activity.max_watts : 0),
             'unit': "W"
         };
         this.maxHr = {
@@ -72,11 +73,14 @@ class _Activity {
         };
     }
     transformEntry(value, unit){
-        return _.extend(this.athlete, {
+        return {
+            'name': this.athlete.name,
+            'picUrl': this.athlete.picUrl,
+            'gender': this.athlete.gender,
             'stravaUrl': "https://www.strava.com/activities/" + this.id,
             'value': value,
             'unit': unit,
-        });
+        };
     }
     getMaxSpeed(unit){
         if(unit == "mph"){

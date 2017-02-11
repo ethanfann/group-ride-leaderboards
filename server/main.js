@@ -2,7 +2,7 @@ import {Meteor} from "meteor/meteor";
 import {HTTP} from "meteor/http";
 import {EJSON} from "meteor/ejson";
 import {Random} from "meteor/random";
-import {Logger} from "meteor/miktam:loggly";
+
 
 Meteor.publish("userData", function () {
     return Meteor.users.find({
@@ -16,7 +16,7 @@ Meteor.publish('completeActivities', function() {
 
     Meteor.call('requestCompleteAthleteActivities',user,function (error, response) {
         if (response)
-            Logger.info(result);
+            console.log(response)
         else
             console.log(error);
     });
@@ -41,7 +41,6 @@ Meteor.publish('leaderboards', function (id) {
                 } else {
                     unit = "kmh";
                 } else {
-                Logger.error(error);
                 console.log(error)
             }
         });
@@ -90,7 +89,6 @@ Meteor.publish('leaderboards', function (id) {
                     sufferLeaderboard.data.push(activity.getSufferScore());
                 }
             } else {
-                Logger.error(error, requestData);
                 console.log(error);
             }
         });
@@ -120,6 +118,7 @@ Meteor.publish('leaderboards', function (id) {
 
                 let activity = new Activity(json, athlete);
 
+
                 maxSpeedLeaderboard.data.push(activity.getMaxSpeed(unit));
                 avgSpeedLeaderboard.data.push(activity.getAvgSpeed(unit));
                 maxWattsLeaderboard.data.push((activity.getMaxWatts()));
@@ -148,11 +147,11 @@ Meteor.publish('leaderboards', function (id) {
                 leaderboards.push(kudosCountLeaderboard);
                 leaderboards.push(sufferLeaderboard);
 
+
                 leaderboards.forEach(function (leaderboard) {
                     self.added("leaderboards", Random.id(), leaderboard);
                 });
             } else {
-                Logger.info(error, requestData);
                 console.log(error);
             }
             self.ready();
