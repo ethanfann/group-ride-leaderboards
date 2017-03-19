@@ -1,28 +1,51 @@
+nav {
+    height: 64px;
+    line-height: 64px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.material-icons {
+    height: 64px;
+    line-height: 64px;
+}
+
+nav .button-collapse i {
+    height: 64px;
+    line-height: 64px;
+}
+
+nav .brand-logo { 
+    font-size: 1.6rem; 
+}
+
+@media only screen and (min-width: 601px){
+    nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
+        height: 64px;
+        line-height: 64px;
+    }
+}
+
+
 body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    /*background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;*/
-    /*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), url('/images/background.jpg');*/
 }
 main {
-    margin-top: 15vh;
     flex: 1 0 auto;
 }
 
 nav ul li a{
     color: black;
 }
-
-li img {
-    margin-right: 10px;
+#searchResults{
+    padding: 0;
+    margin: 0;
+    border: none;
 }
 
 #urlInput {
-    padding-top: 25px;
     text-align: center;
 }
 
@@ -36,9 +59,6 @@ li img {
     padding-left: 5px;
 }
 
-.collection {
-    border: none;
-}
 
 .promo i {
     margin: 40px 0;
@@ -64,58 +84,33 @@ li img {
 }
 
 .circle {
-    height: 45px;
-    width: 45px;
-}
-
-input:focus::-webkit-input-placeholder {
-    opacity: 0;
-}
-input:focus {
-    background-color: black;
+    height: 30px;
+    width: 30px;
+    margin-right: 5px;
 }
 
 #leaderboard {
+    margin-top: 5vh;
     height: 400px;
     overflow: scroll;
     overflow-x: hidden;
 }
 
-input[type="text"] {
-    background-color: white;
-    text-align: center;
-}
-
-input[type="text"]:focus {
-    background-color: turquoise;
-    opacity: 5;
-    text-align: center;
+input[type="search"] {
+    background-color: #0288D1;   
+    height: 64px !important; /* or height of nav */
 }
 
 #loadingBar {
     margin-top: 5vh;
 }
 
-/*::-webkit-scrollbar {
-    width: 8px;
-    background-color: rgba(0,0,0,0);
-    -webkit-border-radius: 100px;
-}
-::-webkit-scrollbar:hover {
-    background-color: rgba(0, 0, 0, 0.09);
-}
-
-::-webkit-scrollbar-thumb:vertical {
-
-    background: rgba(0,0,0,0.5);
-    -webkit-border-radius: 100px;
-}
-::-webkit-scrollbar-thumb:vertical:active {
-    background: rgba(0,0,0,0.61);
-    -webkit-border-radius: 100px;
-}
-
-
-
-*/
+.dark-primary-color    { background: #0288D1; }
+.default-primary-color { background: #03A9F4; }
+.light-primary-color   { background: #B3E5FC; }
+.text-primary-color    { color: #FFFFFF; }
+.accent-color          { background: #E040FB; }
+.primary-text-color    { color: #212121; }
+.secondary-text-color  { color: #757575; }
+.divider-color         { border-color: #BDBDBD; }
 

@@ -4,10 +4,11 @@ import {
 import {
     Meteor
 } from 'meteor/meteor';
+import {
+    Router
+} from 'meteor/iron:router'
 
 import './main.html';
-
-/* --------------GLOBAL --------------*/
 
 AccountsTemplates.configure({
     hideSignUpLink: true,
@@ -18,51 +19,129 @@ AccountsTemplates.configure({
     }
 });
 
-let recentActivities = new ReactiveArray();
 Leaderboards = new Meteor.Collection('leaderboards');
+Activities = new Meteor.Collection('athleteHistory');
 
 // Adds +1 to the value of the index when displaying leaderboards.
 // Instead of 0,1,2,3... we have 1,2,3,4...
-Handlebars.registerHelper("plusOne", function(argument) {
+Handlebars.registerHelper("plusOne", function (argument) {
     return parseInt(argument) + 1;
 });
 
-// Retrieves the athletes profile when the website is loaded
+// Subscribe to authenticated athlete data
 Tracker.autorun(function () {
-    Meteor.subscribe('userData');
+    Meteor.subscribe('athlete');
 });
 
-/* --------------RECENT ACTIVITIES --------------*/
+// Subscribe to authenticated athlete activity urls
+Tracker.autorun(function () {
+    Meteor.subscribe('athleteHistory');
+});
 
-// Retrieve
-Template.recentActivities.onRendered(function(){
-    Meteor.call("requestAthleteRecentActivities", function(error, result) {
-        if (error) {
-            console.log(error);
+/* --------------HEADER--------------*/
+Template.header.helpers({
+    loggedIn: function () {
+        if (Meteor.user()) {
+            return true;
         } else {
-            result.forEach(function(url) {
-               recentActivities.push(url);
+            return false;
+        }
+    }
+})
+
+/* --------------ACTIVITY SEARCH--------------*/
+Template.activitySearch.onCreated(function () {
+    Session.set('searchText', '');
+    Session.set('focused', false);
+});
+
+Template.activitySearch.helpers({
+    search: function () {
+        if (Session.get('searchText') !== '') {
+            let regExp = Session.get('searchText');
+
+            let test = Activities.find({
+                title: {
+                    $regex: regExp,
+                    $options: "i"
+                }
+            }, {
+                limit: 5
+            }).fetch();
+            console.log(test);
+            return test;
+        } else {
+            return Activities.find({}, {
+                limit: 5
             });
         }
-    });
-    this.$(".dropdown-button").dropdown({
-        belowOrigin: true,
-    });
+    },
+    focused: function () {
+        return Session.get('focused');
+    },
+    loading: function () {
+        let data = Activities.find();
+        if (data.count() === 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 });
 
-Template.recentActivities.helpers({
-    recentActivities: function() {
-        return recentActivities.list();
+Template.activitySearch.events({
+    "keyup input#activitySearch" (event, template) {
+        let value = event.target.value.trim();
+        Session.set('searchText', value);
     },
-});
+    "focus input#activitySearch" (event, template) {
+        Session.set('focused', true);
+    },
+    "mousedown #searchResultLink" (event, template) {
+        let url = event.target.href;
+        Session.set('focused', false);
+        Router.go(url);
+    },
+    "blur #searchForm" (event, template) {
+        Session.set('focused', false);
+    },
+    "click #clear" (event, template) {
+        document.getElementById("activitySearch").value = "";
+    },
+        'submit form' (event) {
+        event.preventDefault();
+        let input = event.target.activitySearch.value;
+        let id = "";
+        let splitResult = [];
+        let flag = false;
+        if (input.toLowerCase().includes("strava.com") && input.toLowerCase().includes("activities")) {
+
+            splitResult = input.split('/');
+
+            splitResult.forEach(function (potentialId) {
+                if (Number(potentialId) != 0) {
+                    id = potentialId;
+                    flag = true;
+                }
+            });
+        }
+
+        if (flag) {
+            Router.go('/' + id);
+        } else {
+            Materialize.toast('Looks like there was something wrong with the url', 4000);
+        }
+
+    },
+})
 
 /* --------------LEADERBOARDS --------------*/
 
 Template.leaderboards.helpers({
-    leaderboards: function() {
-        let leaderboards =  Leaderboards.find().fetch();
+    leaderboards: function () {
+        let leaderboards = Leaderboards.find().fetch();
 
-        for(let i = 0; i < leaderboards.length; i++){
+        for (let i = 0; i < leaderboards.length; i++) {
             leaderboards[i].data.sort(function (a, b) {
                 return b.value - a.value;
             });
@@ -72,13 +151,12 @@ Template.leaderboards.helpers({
     }
 });
 
-/* --------------INPUT --------------*/
+/* --------------URL SEARCH --------------*/
 
-Template.input.events({
+Template.activityInput.events({
     'submit form' (event) {
         event.preventDefault();
         let input = event.target.activityInput.value;
-
         let id = "";
         let splitResult = [];
         let flag = false;
@@ -87,14 +165,14 @@ Template.input.events({
             splitResult = input.split('/');
 
             splitResult.forEach(function (potentialId) {
-                if(Number(potentialId) != 0) {
+                if (Number(potentialId) != 0) {
                     id = potentialId;
                     flag = true;
                 }
             });
         }
 
-        if(flag){
+        if (flag) {
             Router.go('/' + id);
         } else {
             Materialize.toast('Looks like there was something wrong with the url', 4000);
@@ -102,6 +180,3 @@ Template.input.events({
 
     },
 });
-
-
-

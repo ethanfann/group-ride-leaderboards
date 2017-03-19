@@ -48,7 +48,7 @@ class _Activity {
             'unit': "bpm"
         };
         this.kilojoules = {
-            'value':(activity.hasOwnProperty("suffer_score") ? activity.suffer_score : 0),
+            'value':(activity.hasOwnProperty("kilojoules") ? activity.kilojoules : 0),
             'unit': "kJ"
         };
         this.prCount = {

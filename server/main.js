@@ -1,47 +1,65 @@
-import {Meteor} from "meteor/meteor";
-import {HTTP} from "meteor/http";
-import {EJSON} from "meteor/ejson";
-import {Random} from "meteor/random";
+import {
+    Meteor
+} from "meteor/meteor";
+import {
+    HTTP
+} from "meteor/http";
+import {
+    EJSON
+} from "meteor/ejson";
+import {
+    Random
+} from "meteor/random";
 
 
-Meteor.publish("userData", function () {
+Meteor.publish("athlete", function () {
     return Meteor.users.find({
         _id: this.userId
     });
 });
 
-Meteor.publish('completeActivities', function() {
-    let self = this;
-    let user = Meteor.users.findOne(self.userId);
+Meteor.publish("athleteHistory", function(search){
+    var self = this;
 
-    Meteor.call('requestCompleteAthleteActivities',user,function (error, response) {
-        if (response)
-            console.log(response)
-        else
-            console.log(error);
-    });
-});
+    if(self.userId){
+        let user = Meteor.users.findOne(self.userId); // Retrieve user data
+
+        Meteor.call("requestAthleteActivities", user, function (error, response) {
+            if (!error) {
+                response.forEach(function (activity) {
+                    self.added('athleteHistory', Random.id(), activity)
+                });
+
+            } else {
+                console.log(error);
+            }
+        });
+    }
+})
+
 
 Meteor.publish('leaderboards', function (id) {
     let self = this;
-    let user = Meteor.users.findOne(self.userId);
+    let user = Meteor.users.findOne(self.userId); // Retrieve user data
 
-
-    if(user) {
+    if (user) {
+        // Build request data with id of the activity, and the user's strava access token
         let requestData = {
             'id': id,
             'token': user.services.strava.accessToken,
         };
 
+        // Retrieve the authenticated athlete's preferred unit
         let unit = "";
-        Meteor.call('requestAthleteUnitPreference', requestData, function (error, response) {
-            if (response)
+        Meteor.call('requestPreferredUnit', requestData, function (error, response) {
+            if (!error) {
                 if (response == "feet") {
                     unit = "mph";
                 } else {
                     unit = "kmh";
-                } else {
-                console.log(error)
+                }
+            } else {
+                console.log(error);
             }
         });
 
@@ -60,47 +78,53 @@ Meteor.publish('leaderboards', function (id) {
         let kudosCountLeaderboard = new Leaderboard("Kudos Count");
         let sufferLeaderboard = new Leaderboard("Suffer Score");
 
-        Meteor.call('requestRelatedActivities', requestData, function (error, response) {
-            if (response) {
-                let json = EJSON.parse(response.content);
+        Meteor.call('requestRelatedActivities', requestData, function (error, json) {
+            if (!error) {
 
-                for (let i = 0; i < json.length; i++) {
+                    for (let i = 0; i < json.length; i++) {
 
-                    let athlete = {
-                        'name': json[i].athlete.firstname + " " + json[i].athlete.lastname,
-                        'gender': json[i].athlete.sex,
-                        'picUrl': json[i].athlete.profile_medium
-                    };
+                        let athlete = {
+                            'name': json[i].athlete.firstname + " " + json[i].athlete.lastname,
+                            'gender': json[i].athlete.sex,
+                            'picUrl': json[i].athlete.profile_medium
+                        };
 
-                    let activity = new Activity(json[i], athlete);
+                        let activity = new Activity(json[i], athlete);
 
-                    maxSpeedLeaderboard.data.push(activity.getMaxSpeed(unit));
-                    avgSpeedLeaderboard.data.push(activity.getAvgSpeed(unit));
-                    maxWattsLeaderboard.data.push((activity.getMaxWatts()));
-                    avgWattsLeaderboard.data.push(activity.getAvgWatts());
-                    weightedAvgWattsLeaderboard.data.push(activity.getWeightedAvgWatts());
-                    maxHrLeaderboard.data.push(activity.getMaxHr());
-                    avgHrLeaderboard.data.push(activity.getAvgHr());
-                    kilojoulesLeaderboard.data.push(activity.getKilojoules());
-                    prCountLeaderboard.data.push(activity.getPrCount());
-                    avgCadenceLeaderboard.data.push(activity.getAvgCadence());
-                    achievementCountLeaderbord.data.push(activity.getAchievementCount());
-                    kudosCountLeaderboard.data.push(activity.getKudosCount());
-                    sufferLeaderboard.data.push(activity.getSufferScore());
-                }
+                        maxSpeedLeaderboard.data.push(activity.getMaxSpeed(unit));
+                        avgSpeedLeaderboard.data.push(activity.getAvgSpeed(unit));
+                        maxWattsLeaderboard.data.push((activity.getMaxWatts()));
+                        avgWattsLeaderboard.data.push(activity.getAvgWatts());
+                        weightedAvgWattsLeaderboard.data.push(activity.getWeightedAvgWatts());
+                        maxHrLeaderboard.data.push(activity.getMaxHr());
+                        avgHrLeaderboard.data.push(activity.getAvgHr());
+                        kilojoulesLeaderboard.data.push(activity.getKilojoules());
+                        prCountLeaderboard.data.push(activity.getPrCount());
+                        avgCadenceLeaderboard.data.push(activity.getAvgCadence());
+                        achievementCountLeaderbord.data.push(activity.getAchievementCount());
+                        kudosCountLeaderboard.data.push(activity.getKudosCount());
+                        sufferLeaderboard.data.push(activity.getSufferScore());
+                    }
+                
             } else {
                 console.log(error);
             }
         });
 
-        Meteor.call('requestSingleActivity', requestData, function (error, response) {
-            if (response) {
-                let json = EJSON.parse(response.content);
+        Meteor.call('requestSingleActivity', requestData, function (error, json) {
+            if (!error) {
+                
+                /*  Gender will be used in the future for leaderboard filtering options.
 
+                    If the subitted activity ID belongs to the currently
+                    authenticated athlete, the athlete object returned in the response will not contain
+                    information for the athlete's name and other such information. This scenario needs to be 
+                    handled with information obtained from the database. I think this behavior should be uniform, no?
+                */
                 let name = "";
                 let gender = "";
                 let picUrl = "";
-                if(json.athlete.resource_state == "1") {
+                if (json.athlete.resource_state == "1") {
                     name = user.services.strava.firstname + " " + user.services.strava.lastname;
                     gender = user.services.strava.sex;
                     picUrl = user.services.strava.profile_medium;
@@ -110,6 +134,7 @@ Meteor.publish('leaderboards', function (id) {
                     picUrl = json.athlete.profile_medium;
                 }
 
+                // Activity data will be appended to this athlete object, then pushed to their respective leaderboard objects
                 let athlete = {
                     'name': name,
                     'gender': gender,
@@ -117,7 +142,6 @@ Meteor.publish('leaderboards', function (id) {
                 };
 
                 let activity = new Activity(json, athlete);
-
 
                 maxSpeedLeaderboard.data.push(activity.getMaxSpeed(unit));
                 avgSpeedLeaderboard.data.push(activity.getAvgSpeed(unit));
@@ -133,6 +157,7 @@ Meteor.publish('leaderboards', function (id) {
                 kudosCountLeaderboard.data.push(activity.getKudosCount());
                 sufferLeaderboard.data.push(activity.getSufferScore());
 
+                // Push all the leaderboard objects to the leaderboards array
                 leaderboards.push(maxSpeedLeaderboard);
                 leaderboards.push(avgSpeedLeaderboard);
                 leaderboards.push(maxWattsLeaderboard);
@@ -147,23 +172,30 @@ Meteor.publish('leaderboards', function (id) {
                 leaderboards.push(kudosCountLeaderboard);
                 leaderboards.push(sufferLeaderboard);
 
-
+                // Build the leaderboards subscription to the client by looping through the leaderboards array, assigning
+                // a random id to each in the array. This is essentially an array of Mongo Collections, that is passed as a data context
+                // to Iron Router, which then provides the data to the leaderboards HTML template
                 leaderboards.forEach(function (leaderboard) {
                     self.added("leaderboards", Random.id(), leaderboard);
                 });
+                
             } else {
                 console.log(error);
             }
-            self.ready();
+            self.ready(); // Indicates the subscription is ready.
         });
     } else {
-        self.ready();
+        self.ready(); // Indicate the subscription is ready even if something
     }
 
 });
 
-// Various methods for querying the Strava API
 Meteor.methods({
+    /*  Queries the Strava API for the related activities of a given activity ID. 
+        Note that this returns athlete_count-1, and a supplement API call will 
+        need to be made to retrieve the single activity belonging to the submitted 
+        activity ID
+    */
     requestRelatedActivities: function (requestData) {
         let url = "https://www.strava.com/api/v3/activities/" + requestData.id + "/related";
 
@@ -173,9 +205,15 @@ Meteor.methods({
             }
         });
 
-        return response;
-
+        if (response.statusCode == 200) {
+            return EJSON.parse(response.content);
+        } else {
+            throw new Meteor.error("strava-api-error", "Error occured when fetching related activities data from the Stava API")
+        }
     },
+    /*  Queries the Strava API for the authenticated athlete's activity. This is required
+        This is the supplmenet API call mentioned above. 
+    */
     requestSingleActivity: function (requestData) {
         let url = "https://www.strava.com/api/v3/activities/" + requestData.id;
 
@@ -185,9 +223,16 @@ Meteor.methods({
             }
         });
 
-        return response;
+        if (response.statusCode == 200) {
+            return EJSON.parse(response.content);
+        } else {
+            throw new Meteor.error("strava-api-error", "Error occured when fetching single activity data")
+        }
     },
-    requestAthleteUnitPreference: function (requestData) {
+    /*  Queries the Strava API for the authenticated athlete's unit preference.
+        Returns either feet or meters
+    */
+    requestPreferredUnit: function (requestData) {
         let url = "https://www.strava.com/api/v3/athlete";
 
         let response = HTTP.call('GET', url, {
@@ -195,34 +240,19 @@ Meteor.methods({
                 "Authorization": "Bearer " + requestData.token
             }
         });
-        let json = EJSON.parse(response.content);
 
-        return json.measurement_preference;
-    },
-    requestAthleteRecentActivities: function () {
-        let token = Meteor.user().services.strava.accessToken;
-        let url = "https://www.strava.com/api/v3/athlete/activities";
-
-        let response = HTTP.call('GET', url, {
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        });
-        let json = EJSON.parse(response.content);
-
-        let activities = [];
-
-        for (let i = 0; i < 5; i++) {
-            let activity = {
-                'title': json[i].name,
-                'id': json[i].id,
-            };
-            activities.push(activity);
+        if (response.statusCode == 200) {
+            let json = EJSON.parse(response.content)
+            return json.measurement_preference;
+        } else {
+            throw new Meteor.error("strava-api-error", "Error occured when fetching athlete preferred unit");
         }
-
-        return activities;
     },
-    requestCompleteAthleteActivities: function(user) {
+    /*  Experimental feature for retrieving the authenticated athlete's complete activity to
+        be used for a universal activity search
+    */
+    requestAthleteActivities: function (user) {
+        this.unblock();
         let token = user.services.strava.accessToken;
         let url = "https://www.strava.com/api/v3/athlete/activities";
 
@@ -230,7 +260,7 @@ Meteor.methods({
         let page = 1;
         let activities = [];
 
-        while(moreActivities) {
+        while (moreActivities) {
             let response = HTTP.call('GET', url, {
                 headers: {
                     "Authorization": "Bearer " + token
@@ -240,21 +270,29 @@ Meteor.methods({
                     "per_page": 200,
                 }
             });
-            let json = EJSON.parse(response.content);
+            if(response.statusCode == 200) {
+                let json = EJSON.parse(response.content);
 
-            json.forEach(function (activity) {
-                activities.push({
-                    'title': activity.name,
-                    'id': activity.id,
-                    'date': activity.start_date,
+                json.forEach(function (activity) {
+                    activities.push({
+                        'title': activity.name,
+                        'url': activity.id,
+                        'date': activity.start_date,
+                    });
                 });
-            });
-
-            if(json.length == 200) {
-                page++;
+                
+                /*  Max amount of activities we can retrieve with one API call is 200
+                    so there may be more to get if the request is completely filled
+                    */
+                if (json.length == 200) {
+                    page++;
+                } else {
+                    moreActivities = false;
+                }
             } else {
-                moreActivities = false;
+                throw new Meteor.error("strava-api-error", "Error occured when querying Strava API for athlete's activity history")
             }
+        
         }
         return activities;
     },
