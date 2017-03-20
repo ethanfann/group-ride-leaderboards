@@ -2,6 +2,7 @@ accounts-base@1.2.14
 accounts-oauth@1.1.13
 accounts-ui@1.1.9
 accounts-ui-unstyled@1.1.12
+aldeed:template-extension@4.1.0
 allow-deny@1.0.5
 autoupdate@1.2.10
 babel-compiler@6.13.0

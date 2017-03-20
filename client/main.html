@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="/favicons/favicon.ico">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+
 </head>
 
 <template name="layout">
@@ -28,33 +29,18 @@
     </footer>
 </template>
 
-
-
 <template name="header">
     <div class="navbar-fixed">
-           <nav class="default-primary-color z-depth-2">
+        <nav class="blue z-depth-2">
             <div class="nav-wrapper container">
-                    <a href="/" class="brand-logo left">Freds</a>
-                    <div class="row">
-                        <ul class="right col s10 m10 l6">
-                            {{#if currentUser}}
-                                {{> activitySearch}}
-                            {{/if}}
-                        </ul>
+                <a href="/" class="brand-logo left">Freds</a>
+                <div class="row">
+                    <ul class="right col s9 m9 l6">
+                        {{#if currentUser}} {{> activitySearch}} {{/if}}
+                    </ul>
                 </div>
             </div>
         </nav>
-    </div>
-</template>
-
-
-<template name="login">
-    <div class="container">
-        <div class="row">
-            <div class="loginButton">
-                {{> atForm}}
-            </div>
-        </div>
     </div>
 </template>
 
@@ -67,25 +53,22 @@
         </div>
     </form>
     {{#if focused}}
-    <div id="searchResults" class="collection z-depth-2">
-        {{#each search}}
-        <a id="searchResultLink" href={{url}} class="collection-item">{{title}}</a> {{/each}}
+    <div id="searchResults" style="border: none;" class="collection z-depth-2">
+        {{#if loading}}
+            {{> searchLoader}}
+        {{else}}
+            {{#each search}}
+                <a id="searchResultLink" href={{url}} class="collection-item">{{title}}</a> 
+            {{/each}}
+        {{/if}}
     </div>
     {{/if}}
 </template>
 
-<template name="activityInput">
-    <!--<div id="urlInput" class="container">
-        <div class="row nav-wrapper">
-            <form class="z-depth-2">
-                <div class="input-field col s12">
-                    <input name="activityInput" placeholder="Ex. www.strava.com/activities/539670567" id="search" type="text" autocomplete="off">
-                    <button class="waves-effect waves-light btn center-align lime darken-1" type="submit">Display</button>
-
-                </div>
-            </form>
-        </div>
-    </div>-->
+<template name="login">
+     <div class="loginButton" style="width: 193px;">
+                {{> atForm}}
+            </div>
 </template>
 
 <template name="leaderboards">
@@ -97,8 +80,8 @@
 </template>
 
 <template name="leaderboard">
-    <div class="col s12 m6 l4">
-        <ul id="leaderboard" class="collection with-header z-depth-1">
+    <div class="col s12 m12 l4">
+        <ul id="leaderboard" class="collection with-header z-depth-1" style="background: white;">
             <li class="collection-header">
                 <h4 class="center">{{name}}</h4>
             </li>
@@ -115,28 +98,29 @@
 
 <template name="banner">
     <div id="banner" class="container z-depth-1">
+        <div class="row" style="margin-top: 10vh">
+            <div class="center promo promo-example">
+                <p class="center flow-text">Connect to Strava, then choose a ride to display! You'll have a few options available.</p>
+            </div>
+        </div>
         <div class="row">
             <div class="col s12 m12 l4">
                 <div class="center promo promo-example">
-                    <i class="material-icons">language</i>
-                    <p>1. Sign in with Strava</p>
-                    <p class="light center">Connecting to Strava gives us access to all the ride data we need to display the leaderboards</p>
+                    <p>1. Recent Activities</p>
+                    <p class="light center">By default your five most recent activities will appear in the search results.</p>
                 </div>
             </div>
             <div class="col s12 m12 l4">
                 <div class="center promo promo-example">
-                    <i class="material-icons">launch</i>
-                    <p>2. Find a ride activity url</p>
-                    <p class="light center">Navigate to a Strava activity then copy down the url located in your browser's address bar. Or use the
-                        recent activities dropdown to quickly access your 5 most recent uploads
+                    <p>2. Activity Search</p>
+                    <p class="light center">Search through your ride history by name.
                     </p>
                 </div>
             </div>
             <div class="col s12 m12 l4">
                 <div class="center promo promo-example">
-                    <i class="material-icons">reorder</i>
-                    <p>3. Enjoy the leaderboards!</p>
-                    <p class="light center">Data will appear in the lists after submitting the url</p>
+                    <p>3. Strava Activity Url</p>
+                    <p class="light center">Or manually enter a ride activity url. An example would be https://www.strava.com/activities/555699882</p>
                 </div>
             </div>
         </div>
@@ -147,12 +131,12 @@
     <footer class="page-footer blue">
         <div class="container">
             <div class="row">
-                <div class="col l5 s12">
+                <div class="col l7 s12">
                     <h5 class="white-text">Leaderboards for your group ride</h5>
-                    <p class="grey-text text-lighten-4">Powered by Strava</p>
+                    <img src="images/powered_strava.png" alt="">
                     <p class="grey-text text-lighten-4">Contact me at: freds.leaderboards@gmail.com</p>
                 </div>
-                <div class="col l7 s12">
+                <div class="col l5 s12">
                     <h5 class="white-text">Links</h5>
                     <ul class="contactLinkList">
                         <li><a id="githubLink" class="waves-effect waves-light brown btn" title="View the Source" href="https://github.com/ethanfann/freds"><i></i><span class="label"><b>Github</b></span></a>
@@ -162,6 +146,14 @@
                         <li><a id="stravaLink" class="waves-effect waves-light btn" title="Strava" style="background-color: #FC4C02;"
                                 href="https://www.strava.com/athletes/5922716"><i></i><span
                                 class="label"><b>Strava</b></span></a></li>
+                        <li><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+</li>
                     </ul>
                 </div>
             </div>
@@ -175,7 +167,20 @@
 </template>
 
 <template name="loading">
-    <div id="loadingBar" class="progress container default-primary-color">
+    <div style="margin-top: 5vh;" class="progress container default-primary-color">
         <div class="indeterminate" style="background-color: turquoise"></div>
     </div>
+</template>
+
+<template name="searchLoader">
+     <div class="progress">
+      <div class="indeterminate"></div>
+  </div>
+</template>
+
+<template name="my-atSocial">
+    <button style="background: url(images/btn_strava.png) no-repeat center center; height: 48px; border: none" class="at-social-btn {{disabled}}"
+        id="at-{{name}}" name="{{name}}">
+        <i class="{{iconClass}} left"></i>
+      </button>
 </template>

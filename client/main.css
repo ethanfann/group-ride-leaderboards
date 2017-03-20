@@ -1,3 +1,11 @@
+html {
+    background: url(images/background.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 nav {
     height: 64px;
     line-height: 64px;
@@ -5,7 +13,10 @@ nav {
     padding-bottom: 0;
 }
 
-nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.material-icons {
+nav i,
+nav [class^="mdi-"],
+nav [class*="mdi-"],
+nav i.material-icons {
     height: 64px;
     line-height: 64px;
 }
@@ -15,50 +26,24 @@ nav .button-collapse i {
     line-height: 64px;
 }
 
-nav .brand-logo { 
-    font-size: 1.6rem; 
+nav .brand-logo {
+    font-size: 4rem;
 }
-
-@media only screen and (min-width: 601px){
-    nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-        height: 64px;
-        line-height: 64px;
-    }
-}
-
 
 body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
+
 main {
     flex: 1 0 auto;
 }
 
-nav ul li a{
-    color: black;
-}
-#searchResults{
-    padding: 0;
-    margin: 0;
-    border: none;
-}
-
-#urlInput {
-    text-align: center;
-}
-
-.at-social-btn {
-    background-color: #FC4C02;
-    width: 50px;
-}
-
 .contactLinkList li {
-    display: inline;
-    padding-left: 5px;
+    display: inline-block;
+    padding: 5px;
 }
-
 
 .promo i {
     margin: 40px 0;
@@ -68,12 +53,16 @@ nav ul li a{
 }
 
 .loginButton {
-    margin: 0 auto;
-    width: 200px;
     padding-top: 25vh;
+    margin: 0 auto;
+}
+
+button#at-strava.at-social-btn{
+    width: 100px;
 }
 
 #banner {
+    margin-top: 10vh;
     background: white;
     padding-left: 15px;
     padding-right: 25px;
@@ -97,20 +86,39 @@ nav ul li a{
 }
 
 input[type="search"] {
-    background-color: #0288D1;   
-    height: 64px !important; /* or height of nav */
+    background-color: #0288D1;
+    height: 64px !important;
+    /* or height of nav */
 }
 
-#loadingBar {
-    margin-top: 5vh;
+.dark-primary-color {
+    background: #0288D1;
 }
 
-.dark-primary-color    { background: #0288D1; }
-.default-primary-color { background: #03A9F4; }
-.light-primary-color   { background: #B3E5FC; }
-.text-primary-color    { color: #FFFFFF; }
-.accent-color          { background: #E040FB; }
-.primary-text-color    { color: #212121; }
-.secondary-text-color  { color: #757575; }
-.divider-color         { border-color: #BDBDBD; }
+.default-primary-color {
+    background: #03A9F4;
+}
 
+.light-primary-color {
+    background: #B3E5FC;
+}
+
+.text-primary-color {
+    color: #FFFFFF;
+}
+
+.accent-color {
+    background: #E040FB;
+}
+
+.primary-text-color {
+    color: #212121;
+}
+
+.secondary-text-color {
+    color: #757575;
+}
+
+.divider-color {
+    border-color: #BDBDBD;
+}

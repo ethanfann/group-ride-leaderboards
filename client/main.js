@@ -15,9 +15,11 @@ AccountsTemplates.configure({
     texts: {
         title: {
             signIn: "",
-        }
+            signUp: ""
+        },
     }
 });
+Template['my-atSocial'].replaces('atSocial');
 
 Leaderboards = new Meteor.Collection('leaderboards');
 Activities = new Meteor.Collection('athleteHistory');
@@ -107,6 +109,7 @@ Template.activitySearch.events({
     },
     "click #clear" (event, template) {
         document.getElementById("activitySearch").value = "";
+        Session.set("searchText", "");
     },
         'submit form' (event) {
         event.preventDefault();
@@ -153,30 +156,30 @@ Template.leaderboards.helpers({
 
 /* --------------URL SEARCH --------------*/
 
-Template.activityInput.events({
-    'submit form' (event) {
-        event.preventDefault();
-        let input = event.target.activityInput.value;
-        let id = "";
-        let splitResult = [];
-        let flag = false;
-        if (input.toLowerCase().includes("strava.com") && input.toLowerCase().includes("activities")) {
+// Template.activityInput.events({
+//     'submit form' (event) {
+//         event.preventDefault();
+//         let input = event.target.activityInput.value;
+//         let id = "";
+//         let splitResult = [];
+//         let flag = false;
+//         if (input.toLowerCase().includes("strava.com") && input.toLowerCase().includes("activities")) {
 
-            splitResult = input.split('/');
+//             splitResult = input.split('/');
 
-            splitResult.forEach(function (potentialId) {
-                if (Number(potentialId) != 0) {
-                    id = potentialId;
-                    flag = true;
-                }
-            });
-        }
+//             splitResult.forEach(function (potentialId) {
+//                 if (Number(potentialId) != 0) {
+//                     id = potentialId;
+//                     flag = true;
+//                 }
+//             });
+//         }
 
-        if (flag) {
-            Router.go('/' + id);
-        } else {
-            Materialize.toast('Looks like there was something wrong with the url', 4000);
-        }
+//         if (flag) {
+//             Router.go('/' + id);
+//         } else {
+//             Materialize.toast('Looks like there was something wrong with the url', 4000);
+//         }
 
-    },
-});
+//     },
+// });

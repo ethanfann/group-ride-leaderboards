@@ -30,3 +30,4 @@ force-ssl@1.0.13
 iron:router
 manuel:reactivearray
 underscore
+aldeed:template-extension
