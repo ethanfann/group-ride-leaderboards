@@ -30,13 +30,8 @@ Handlebars.registerHelper("plusOne", function (argument) {
     return parseInt(argument) + 1;
 });
 
-// Subscribe to authenticated athlete data
 Tracker.autorun(function () {
     Meteor.subscribe('athlete');
-});
-
-// Subscribe to authenticated athlete activity urls
-Tracker.autorun(function () {
     Meteor.subscribe('athleteHistory');
 });
 
@@ -62,7 +57,7 @@ Template.activitySearch.helpers({
         if (Session.get('searchText') !== '') {
             let regExp = Session.get('searchText');
 
-            let test = Activities.find({
+            return Activities.find({
                 title: {
                     $regex: regExp,
                     $options: "i"
@@ -70,8 +65,6 @@ Template.activitySearch.helpers({
             }, {
                 limit: 5
             }).fetch();
-            console.log(test);
-            return test;
         } else {
             return Activities.find({}, {
                 limit: 5
@@ -122,7 +115,7 @@ Template.activitySearch.events({
             splitResult = input.split('/');
 
             splitResult.forEach(function (potentialId) {
-                if (Number(potentialId) != 0) {
+                if (!isNaN(potentialId)) {
                     id = potentialId;
                     flag = true;
                 }
@@ -139,7 +132,6 @@ Template.activitySearch.events({
 })
 
 /* --------------LEADERBOARDS --------------*/
-
 Template.leaderboards.helpers({
     leaderboards: function () {
         let leaderboards = Leaderboards.find().fetch();
@@ -151,35 +143,5 @@ Template.leaderboards.helpers({
         }
 
         return leaderboards;
-    }
+    },
 });
-
-/* --------------URL SEARCH --------------*/
-
-// Template.activityInput.events({
-//     'submit form' (event) {
-//         event.preventDefault();
-//         let input = event.target.activityInput.value;
-//         let id = "";
-//         let splitResult = [];
-//         let flag = false;
-//         if (input.toLowerCase().includes("strava.com") && input.toLowerCase().includes("activities")) {
-
-//             splitResult = input.split('/');
-
-//             splitResult.forEach(function (potentialId) {
-//                 if (Number(potentialId) != 0) {
-//                     id = potentialId;
-//                     flag = true;
-//                 }
-//             });
-//         }
-
-//         if (flag) {
-//             Router.go('/' + id);
-//         } else {
-//             Materialize.toast('Looks like there was something wrong with the url', 4000);
-//         }
-
-//     },
-// });

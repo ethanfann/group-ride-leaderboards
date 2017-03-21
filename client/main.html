@@ -19,7 +19,15 @@
 
     <body>
         <main>
-            {{#if currentUser}} {{> yield}} {{else}} {{> login}} {{/if}}
+            {{#if currentUser}} 
+                {{> yield}} 
+            {{else}} 
+                {{#if loggingIn}}
+                    {{> loading}}
+                {{else}}
+                    {{> login}} 
+                {{/if}}
+            {{/if}}
         </main>
         {{> banner}}
     </body>
@@ -58,7 +66,7 @@
             {{> searchLoader}}
         {{else}}
             {{#each search}}
-                <a id="searchResultLink" href={{url}} class="collection-item">{{title}}</a> 
+                <a id="searchResultLink" href={{id}} class="collection-item">{{title}}</a> 
             {{/each}}
         {{/if}}
     </div>
