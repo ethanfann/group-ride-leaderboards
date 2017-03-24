@@ -8,7 +8,7 @@ import {
 if(Meteor.isClient) {
     Router.configure({
         layoutTemplate: 'layout',
-        loadingTemplate: 'loading',
+        loadingTemplate: 'leaderboardLoader',
         notFoundTemplate: 'leaderboards',
     });
     Router.route('/', function() {
@@ -23,7 +23,7 @@ if(Meteor.isClient) {
             if (this.ready()) {
                 this.render('leaderboards');
             } else {
-                this.render('loading');
+                this.render('leaderboardLoader');
             }
         }
     });

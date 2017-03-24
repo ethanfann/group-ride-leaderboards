@@ -37,8 +37,10 @@ Tracker.autorun(function () {
 
 /* --------------HEADER--------------*/
 Template.header.helpers({
-    loggedIn: function () {
-        if (Meteor.user()) {
+
+    loading: function () {
+        let data = Activities.find();
+        if (data.count() === 0) {
             return true;
         } else {
             return false;
@@ -104,7 +106,7 @@ Template.activitySearch.events({
         document.getElementById("activitySearch").value = "";
         Session.set("searchText", "");
     },
-        'submit form' (event) {
+    'submit form' (event) {
         event.preventDefault();
         let input = event.target.activitySearch.value;
         let id = "";
@@ -140,6 +142,11 @@ Template.leaderboards.helpers({
             leaderboards[i].data.sort(function (a, b) {
                 return b.value - a.value;
             });
+        }
+
+        // Reduce the height of the leaderboards if the list doesn't need to be scrolled. Saves space
+        if (leaderboards[0].data.length < 5) {
+            console.log(document.getElementById('leaderboard'));
         }
 
         return leaderboards;

@@ -27,7 +27,7 @@ nav .button-collapse i {
 }
 
 nav .brand-logo {
-    font-size: 4rem;
+    font-size: 2rem;
 }
 
 body {
@@ -79,7 +79,9 @@ button#at-strava.at-social-btn{
 }
 
 #leaderboard {
-    margin-top: 5vh;
+    margin-top: 10vh;
+    margin-left: 20px;
+    margin-right: 20px;
     height: 400px;
     overflow: scroll;
     overflow-x: hidden;
@@ -89,36 +91,4 @@ input[type="search"] {
     background-color: #0288D1;
     height: 64px !important;
     /* or height of nav */
-}
-
-.dark-primary-color {
-    background: #0288D1;
-}
-
-.default-primary-color {
-    background: #03A9F4;
-}
-
-.light-primary-color {
-    background: #B3E5FC;
-}
-
-.text-primary-color {
-    color: #FFFFFF;
-}
-
-.accent-color {
-    background: #E040FB;
-}
-
-.primary-text-color {
-    color: #212121;
-}
-
-.secondary-text-color {
-    color: #757575;
-}
-
-.divider-color {
-    border-color: #BDBDBD;
 }

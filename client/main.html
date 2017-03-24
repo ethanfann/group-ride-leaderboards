@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/favicons/favicon.ico">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-
+    <meta name=viewport content="width=device-width, initial-scale=1">
 </head>
 
 <template name="layout">
@@ -19,15 +19,7 @@
 
     <body>
         <main>
-            {{#if currentUser}} 
-                {{> yield}} 
-            {{else}} 
-                {{#if loggingIn}}
-                    {{> loading}}
-                {{else}}
-                    {{> login}} 
-                {{/if}}
-            {{/if}}
+            {{#if currentUser}} {{> yield}} {{else}} {{#if loggingIn}} {{> leaderboardLoader}} {{else}} {{> login}} {{/if}} {{/if}}
         </main>
         {{> banner}}
     </body>
@@ -43,11 +35,14 @@
             <div class="nav-wrapper container">
                 <a href="/" class="brand-logo left">Freds</a>
                 <div class="row">
-                    <ul class="right col s9 m9 l6">
+                    <ul class="right col s6 m6 l6">
                         {{#if currentUser}} {{> activitySearch}} {{/if}}
                     </ul>
+                    {{#if loading}} {{> activityLoader}} {{/if}}
                 </div>
+
             </div>
+
         </nav>
     </div>
 </template>
@@ -62,21 +57,16 @@
     </form>
     {{#if focused}}
     <div id="searchResults" style="border: none;" class="collection z-depth-2">
-        {{#if loading}}
-            {{> searchLoader}}
-        {{else}}
-            {{#each search}}
-                <a id="searchResultLink" href={{id}} class="collection-item">{{title}}</a> 
-            {{/each}}
-        {{/if}}
+        {{#each search}}
+        <a id="searchResultLink" href={{id}} class="collection-item">{{title}}</a> {{/each}}
     </div>
     {{/if}}
 </template>
 
 <template name="login">
-     <div class="loginButton" style="width: 193px;">
-                {{> atForm}}
-            </div>
+    <div class="loginButton" style="width: 193px;">
+        {{> atForm}}
+    </div>
 </template>
 
 <template name="leaderboards">
@@ -88,7 +78,7 @@
 </template>
 
 <template name="leaderboard">
-    <div class="col s12 m12 l4">
+    <div class="col s12 m12 l6">
         <ul id="leaderboard" class="collection with-header z-depth-1" style="background: white;">
             <li class="collection-header">
                 <h4 class="center">{{name}}</h4>
@@ -106,7 +96,7 @@
 
 <template name="banner">
     <div id="banner" class="container z-depth-1">
-        <div class="row" style="margin-top: 10vh">
+        <div class="row" style="margin-top: 5vh">
             <div class="center promo promo-example">
                 <p class="center flow-text">Connect to Strava, then choose a ride to display! You'll have a few options available.</p>
             </div>
@@ -154,36 +144,97 @@
                         <li><a id="stravaLink" class="waves-effect waves-light btn" title="Strava" style="background-color: #FC4C02;"
                                 href="https://www.strava.com/athletes/5922716"><i></i><span
                                 class="label"><b>Strava</b></span></a></li>
-                        <li><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+                        <li>
+                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                                <input type="hidden" name="cmd" value="_s-xclick">
+                                <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
 ">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-</li>
+                                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                                <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="footer-copyright">
             <div class="container">
-                © 2016 Ethan Fann
+                © 2017 Ethan Fann
             </div>
         </div>
     </footer>
 </template>
 
-<template name="loading">
-    <div style="margin-top: 5vh;" class="progress container default-primary-color">
-        <div class="indeterminate" style="background-color: turquoise"></div>
+<template name="activityLoader">
+    <div class="right">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-yellow-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
-<template name="searchLoader">
-     <div class="progress">
-      <div class="indeterminate"></div>
-  </div>
+<template name="leaderboardLoader">
+    <div class="center" style="margin-top: 5vh;">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="my-atSocial">
