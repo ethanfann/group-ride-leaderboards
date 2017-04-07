@@ -38,7 +38,6 @@
                     <ul class="right col s6 m6 l6">
                         {{#if currentUser}} {{> activitySearch}} {{/if}}
                     </ul>
-                    {{#if loading}} {{> activityLoader}} {{/if}}
                 </div>
 
             </div>
@@ -56,10 +55,14 @@
         </div>
     </form>
     {{#if focused}}
-    <div id="searchResults" style="border: none;" class="collection z-depth-2">
-        {{#each search}}
-        <a id="searchResultLink" href={{id}} class="collection-item">{{title}}</a> {{/each}}
-    </div>
+        {{#if loading}}
+            {{> activityLoader}}
+        {{else}}
+            <div id="searchResults" style="border: none;" class="collection z-depth-2">
+                {{#each search}}
+                <a id="searchResultLink" href={{id}} class="collection-item">{{title}}</a> {{/each}}
+            </div>
+        {{/if}}
     {{/if}}
 </template>
 
