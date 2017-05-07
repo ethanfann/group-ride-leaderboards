@@ -231,6 +231,7 @@ Meteor.methods({
         }
 
         if (response.statusCode == 200) {
+            console.log(response);
             return EJSON.parse(response.content);
         } else {
             throw new Meteor.Error("api-request-error", "Failed to retrieve related activities for activity id: " + requestData.id, response);
