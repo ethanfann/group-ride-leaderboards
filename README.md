@@ -1,4 +1,4 @@
-# Group Ride Leaderboards (Freds)
+# Group Ride Leaderboards
 
 Provides leaderboards for a Strava activity, and any related activities
 
