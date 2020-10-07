@@ -1,5 +1,7 @@
 # Group Ride Leaderboards
 
+[2016 Strava Developer Challenge - 5th Place](https://blog.strava.com/powered-by-strava-apps-12402/)
+
 Provides leaderboards for a Strava activity, and any related activities
 
 # Demo
